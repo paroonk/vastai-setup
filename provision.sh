@@ -4,7 +4,8 @@
 #   https://raw.githubusercontent.com/paroonk/vastai-setup/main/provision.sh
 #
 # Template env vars:
-#   STACKS         - which stacks to install: "mmh3", "mmh3,qwen21", or "all" (default: all)
+#   STACKS         - which stacks to install: "mmh3-DaSiWa", "mmh3-DaSiWa,qwen21", or "all" (default: all);
+#                    names are case-insensitive
 #                    Each stack = stacks/<name>/stack.sh (nodes, models) + its workflow JSONs.
 #   CIVITAI_TOKEN  - Civitai API key (required for Civitai downloads)
 #   HF_TOKEN       - HuggingFace token (needed only for gated/private repos)
@@ -44,7 +45,12 @@ PIP_PACKAGES=(
     "sageattention"
 )
 
-NODES=()
+# Custom nodes every stack uses
+NODES=(
+  "https://github.com/rgthree/rgthree-comfy"
+  "https://github.com/kijai/ComfyUI-KJNodes"
+  "https://github.com/city96/ComfyUI-GGUF"
+)
 MODELS=()     # "subdir|url"
 CIVITAI=()    # "target|url"
 
@@ -310,8 +316,10 @@ fetch_stacks() {
         for s in "${req[@]}"; do
             s="${s//[[:space:]]/}"
             [ -z "$s" ] && continue
-            if grep -qxF -- "$s" <<< "$available"; then
-                wanted+=("$s")
+            local match
+            match=$(grep -ixF -- "$s" <<< "$available" | head -1)   # case-insensitive, real folder name kept
+            if [ -n "$match" ]; then
+                wanted+=("$match")
             else
                 echo "ERROR: unknown stack '$s'"
                 FAILED+=("stack: unknown '$s'")

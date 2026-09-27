@@ -1,6 +1,6 @@
 # Stack: MiniMax H3 on ComfyUI
 # Sourced by provision.sh. Only add to the lists here; the download engine lives in provision.sh.
-# Workflows: every *.json in this folder is installed to ComfyUI workflows/mmh3/.
+# Workflows: every *.json in this folder is installed to ComfyUI workflows/mmh3-DaSiWa/.
 
 # Each entry is passed to pip unquoted, so an entry may carry its own flags.
 PIP_PACKAGES+=(
@@ -10,10 +10,8 @@ PIP_PACKAGES+=(
     "tensorrt-cu13-libs==10.15.1.29"
 )
 
+# Base nodes (rgthree, KJNodes, GGUF) come from provision.sh
 NODES+=(
-  "https://github.com/rgthree/rgthree-comfy"
-  "https://github.com/kijai/ComfyUI-KJNodes"
-  "https://github.com/city96/ComfyUI-GGUF"
   "https://github.com/darksidewalker/ComfyUI-DaSiWa-Nodes"
   "https://github.com/bbaudio-2025/Comfyui-MMH3-UltimateUpscale"
 )

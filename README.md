@@ -12,6 +12,8 @@ stacks/<name>/
   *.json                its workflows
 ```
 
+Nodes used by every stack (rgthree, KJNodes, GGUF) are in `provision.sh`; stacks list only their own.
+
 Repo holds only `.sh` and workflow `.json`. Models stay on Hugging Face / Civitai.
 
 ## Use
@@ -26,7 +28,7 @@ Template env vars:
 
 | Var | Default | Purpose |
 |---|---|---|
-| `STACKS` | `all` | `mmh3`, `mmh3,qwen21`, or `all`. Selects nodes, models and workflows together. |
+| `STACKS` | `all` | `mmh3-DaSiWa`, `mmh3-DaSiWa,qwen21`, or `all` (case-insensitive). Selects nodes, models and workflows together. |
 | `CIVITAI_TOKEN` | — | Civitai API key. Required for Civitai downloads. |
 | `HF_TOKEN` | — | Only for gated Hugging Face repos. |
 | `TEXT_ENCODER` | `auto` | `nvfp4` (Blackwell) / `int8` / `auto` |
@@ -43,7 +45,7 @@ Commit the `.json` into `stacks/<name>/`. Next instance installs it under ComfyU
 
 ## Add a stack
 
-1. Create `stacks/<name>/stack.sh` — copy `stacks/mmh3/stack.sh`, replace the lists.
+1. Create `stacks/<name>/stack.sh` — copy `stacks/mmh3-DaSiWa/stack.sh`, replace the lists.
    Only append (`+=`); never reassign a list, or you wipe other stacks' entries.
 2. Add its workflow JSONs to the same folder.
 
