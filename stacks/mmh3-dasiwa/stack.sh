@@ -45,8 +45,8 @@ MODELS+=(
 # Civitai files (filename comes from the server). Needs CIVITAI_TOKEN.
 # Format: "target|url"   target = "workflows" or a models subdir
 CIVITAI+=(
-  # DaSiWa MiniMax H3 workflows (C-MMH3 v2.4) — zip is auto-extracted
-  "workflows|https://civitai.red/api/download/models/3195699?fileId=3247382"
+  # DaSiWa MiniMax H3 workflows (C-MMH3 v2.5, single JSON). The v2.4 zip (fileId 3247382) was removed.
+  "workflows|https://civitai.red/api/download/models/3195699?fileId=3249252"
   # DaSiWa MiniMax H3 checkpoint (DaSiWa Hybrid v2)
   "diffusion_models|https://civitai.red/api/download/models/3314675?fileId=3203130"
   # Minimax H3 Turbo LoRA (turbo-multistep-v2)
