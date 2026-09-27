@@ -4,7 +4,7 @@
 #   https://raw.githubusercontent.com/paroonk/vastai-setup/main/provision.sh
 #
 # Template env vars:
-#   STACKS         - which stacks to install: "mmh3-DaSiWa", "mmh3-DaSiWa,qwen21", or "all" (default: all);
+#   STACKS         - which stacks to install: "mmh3-dasiwa", "mmh3-dasiwa,qwen21", or "all" (default: all);
 #                    names are case-insensitive
 #                    Each stack = stacks/<name>/stack.sh (nodes, models) + its workflow JSONs.
 #   CIVITAI_TOKEN  - Civitai API key (required for Civitai downloads)

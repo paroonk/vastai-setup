@@ -1,13 +1,10 @@
 # Stack: MiniMax H3 on ComfyUI
 # Sourced by provision.sh. Only add to the lists here; the download engine lives in provision.sh.
-# Workflows: every *.json in this folder is installed to ComfyUI workflows/mmh3-DaSiWa/.
+# Workflows: every *.json in this folder is installed to ComfyUI workflows/mmh3-dasiwa/.
 
 # Each entry is passed to pip unquoted, so an entry may carry its own flags.
 PIP_PACKAGES+=(
     "--upgrade --force-reinstall --no-cache-dir https://github.com/JamePeng/llama-cpp-python/releases/download/v0.4.1-cu131-linux-20260926/llama_cpp_python-0.4.1+cu131-cp312-cp312-linux_x86_64.whl"
-    "tensorrt-cu13==10.15.1.29"
-    "tensorrt-cu13-bindings==10.15.1.29"
-    "tensorrt-cu13-libs==10.15.1.29"
 )
 
 # Base nodes (rgthree, KJNodes, GGUF) come from provision.sh
