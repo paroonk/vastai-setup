@@ -65,7 +65,7 @@ check_disk() {
     free_gb=$(df -BG --output=avail "$WORKSPACE" | tail -1 | tr -dc '0-9')
     echo "Free disk on $WORKSPACE: ${free_gb} GB"
     if [ "${free_gb:-0}" -lt 100 ]; then
-        echo "WARNING: <100 GB free. Full set needs ~70-80 GB. Downloads may fail."
+        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, qwen21 ~44 GB, all ~108 GB. Downloads may fail."
     fi
 }
 

@@ -16,6 +16,15 @@ Nodes used by every stack (rgthree, KJNodes, GGUF) are in `provision.sh`; stacks
 
 Repo holds only `.sh` and workflow `.json`. Models stay on Hugging Face / Civitai.
 
+## Stacks
+
+| Stack | What | Approx. download |
+|---|---|---|
+| `mmh3-dasiwa` | MiniMax H3 video + DaSiWa workflows | ~75 GB |
+| `qwen21` | Qwen Image 2.1 multi-reference editing (bf16) + QwenVL enhancer | ~44 GB |
+
+Shared files (llama-cpp, Qwen3.5 GGUF LLM) download once, so `all` is less than the sum.
+
 ## Use
 
 In the Vast.ai template set `PROVISIONING_SCRIPT` to:
