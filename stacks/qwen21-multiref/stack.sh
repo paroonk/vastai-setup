@@ -25,7 +25,7 @@ MODELS+=(
   "vae|https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors"
   # Detailer LoRA for __qwen21/enhance__ (~80 MB)
   "loras|https://huggingface.co/reverentelusarca/elusarcas-qwen-2.1-detail-enhancer-lora/resolve/main/elusarcas-qwen2-1-detailer-v1.safetensors"
-  # QwenVL enhancer LLM (GGUF) + vision projector — same files as mmh3-dasiwa, downloaded once
+  # QwenVL enhancer LLM (GGUF) + vision projector
   "llm/GGUF|https://huggingface.co/DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF/resolve/main/Qwen3.5-9B-The-Defiant-Fable-Uncnr-Heretic-NEO-MAX-Q8_0.gguf"
   "llm/GGUF|https://huggingface.co/DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF/resolve/main/mmproj-F16.gguf"
 )
