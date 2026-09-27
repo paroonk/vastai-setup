@@ -22,7 +22,7 @@ Repo holds only `.sh` and workflow `.json`. Models stay on Hugging Face / Civita
 |---|---|---|
 | `mmh3-dasiwa` | MiniMax H3 video + DaSiWa workflows | ~75 GB |
 | `qwen21-multiref` | Qwen Image 2.1 multi-reference editing (bf16) + QwenVL enhancer | ~44 GB |
-| `mmh3-obvpm-timeline` | MiniMax H3 timeline: generate / extend / bridge / upscale (needs ComfyUI 0.35.0+) | ~46 GB (+2.6 GB if mmh3-dasiwa also selected) |
+| `mmh3-obvpm-timeline` | MiniMax H3 timeline: generate / extend / bridge / upscale (needs ComfyUI 0.35.0+) | ~48 GB (+4.5 GB if mmh3-dasiwa also selected) |
 
 Shared files download once, so `all` is less than the sum: llama-cpp and the Qwen3.5 GGUF LLM
 (mmh3-dasiwa, qwen21-multiref); MiniMax H3 model, VAEs, text encoder, upscaler (mmh3-dasiwa, mmh3-obvpm-timeline).
