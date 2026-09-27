@@ -1,6 +1,7 @@
 # Stack: MiniMax H3 on ComfyUI
 # Sourced by provision.sh. Only add to the lists here; the download engine lives in provision.sh.
 # Workflows: every *.json in this folder is installed to ComfyUI workflows/mmh3-dasiwa/.
+# DasiwaMinimaxH3WorkflowsT2VA_cMMH3V25.json: DaSiWa C-MMH3 v2.5 (Civitai), model paths fixed to this stack.
 
 # Each entry is passed to pip unquoted, so an entry may carry its own flags.
 # llama-cpp and the Qwen3.5 GGUF LLM below are also listed in qwen21-multiref; installed once when both are selected.
@@ -45,8 +46,6 @@ MODELS+=(
 # Civitai files (filename comes from the server). Needs CIVITAI_TOKEN.
 # Format: "target|url"   target = "workflows" or a models subdir
 CIVITAI+=(
-  # DaSiWa MiniMax H3 workflows (C-MMH3 v2.5, single JSON). The v2.4 zip (fileId 3247382) was removed.
-  "workflows|https://civitai.red/api/download/models/3195699?fileId=3249252"
   # DaSiWa MiniMax H3 checkpoint (DaSiWa Hybrid v2)
   "diffusion_models|https://civitai.red/api/download/models/3314675?fileId=3203130"
   # Minimax H3 Turbo LoRA (turbo-multistep-v2)

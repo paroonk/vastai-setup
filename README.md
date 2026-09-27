@@ -64,9 +64,18 @@ No change to `provision.sh`. Models/nodes shared between stacks download once.
 
 ## Third-party workflows
 
-`stacks/mmh3-obvpm-timeline/*.json` is from [chanon/comfyui-obvpm-timeline](https://github.com/chanon/comfyui-obvpm-timeline)
-(GPL-3.0), with the latent upscaler filename changed to the file this stack downloads.
-It is a snapshot: when updating the node pack, refresh the JSON from upstream too.
+Saved here so instances don't depend on Civitai/GitHub availability. Model paths are edited to match
+the files each stack downloads (no subfolders, stack's own model variants). They are snapshots:
+when the author releases a new version, re-download and re-apply the path fixes.
+
+| File | Source | Changes |
+|---|---|---|
+| `stacks/mmh3-dasiwa/DasiwaMinimaxH3WorkflowsT2VA_cMMH3V25.json` | DaSiWa C-MMH3 v2.5 (Civitai 3195699) | `MiniMaxH3/` prefixes removed; checkpoint -> Civitai filename; latent upscaler -> conv_v1_bf16 |
+| `stacks/qwen21-multiref/QwenImageEdit21-Wildcards-Qwen3.5.json` | huchukato QwenImageEdit21 v1.1 (Civitai 3353811) | diffusion model + text encoder -> official bf16 (author used Uncensored/Heretic int8) |
+| `stacks/mmh3-obvpm-timeline/h3_obvpm_timeline_r2v_v0.1.1-005.json` | [chanon/comfyui-obvpm-timeline](https://github.com/chanon/comfyui-obvpm-timeline) (GPL-3.0) | `h3\` LoRA prefixes removed (nodes + presets); latent upscaler -> conv_v1_bf16 |
+
+MiniMax H3 workflows reference the **nvfp4** text encoder (Blackwell). On other GPUs the stacks download
+int8: pick `qwen3vl_32b_minimax_h3_int8_convrot` in the text encoder node once and save.
 
 ## Rules
 

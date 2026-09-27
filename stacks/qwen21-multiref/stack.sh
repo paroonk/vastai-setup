@@ -1,6 +1,7 @@
 # Stack: Qwen Image 2.1 Multi-Reference Editing (huchukato, Civitai v1.1)
 # Sourced by provision.sh. Only add to the lists here; the download engine lives in provision.sh.
-# Workflow zip (Civitai) extracts to ComfyUI workflows/. Any *.json in this folder -> workflows/qwen21-multiref/.
+# Workflow: QwenImageEdit21-Wildcards-Qwen3.5.json (huchukato v1.1, Civitai), models pointed at this stack's bf16 files.
+# Every *.json in this folder -> ComfyUI workflows/qwen21-multiref/.
 # Base nodes (rgthree, KJNodes, GGUF) come from provision.sh.
 
 # QwenVL enhancer runs in GGUF mode: vision-capable llama-cpp.
@@ -30,8 +31,3 @@ MODELS+=(
   "llm/GGUF|https://huggingface.co/DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF/resolve/main/mmproj-F16.gguf"
 )
 
-# Civitai files. Needs CIVITAI_TOKEN.  Format: "target|url"
-CIVITAI+=(
-  # QwenImageEdit21 v1.1 workflow (QwenImageEdit21-Wildcards-Qwen3.5.json.zip) — auto-extracted
-  "workflows|https://civitai.red/api/download/models/3353811?fileId=3246053"
-)
