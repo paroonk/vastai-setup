@@ -53,8 +53,6 @@ NODES=(
 )
 MODELS=()     # "subdir|url"
 CIVITAI=()    # "target|url"
-NODE_WORKFLOWS=()  # "stack|custom_nodes/<pack>/<dir>": copy workflow JSONs a node pack ships
-WORKFLOW_FIXES=()  # "stack|old text|new text": replaced in that stack's installed workflow JSONs
 
 ### ============================================================
 ### FUNCTIONS — download engine (unchanged from the original gist)
@@ -348,14 +346,13 @@ load_stacks() {
     for s in "${SELECTED[@]}"; do
         f="$REPO_DIR/stacks/$s/stack.sh"
         if [ -f "$f" ]; then
-            STACK="$s"    # stack.sh may use $STACK, e.g. in NODE_WORKFLOWS entries
             source "$f"
             echo "Loaded stack: $s"
         else
             echo "Stack '$s' has no stack.sh (workflows only)."
         fi
     done
-    dedupe APT_PACKAGES; dedupe PIP_PACKAGES; dedupe NODES; dedupe MODELS; dedupe CIVITAI; dedupe NODE_WORKFLOWS; dedupe WORKFLOW_FIXES
+    dedupe APT_PACKAGES; dedupe PIP_PACKAGES; dedupe NODES; dedupe MODELS; dedupe CIVITAI
     echo "To install: ${#NODES[@]} nodes, ${#MODELS[@]} models, ${#CIVITAI[@]} Civitai files"
 }
 
@@ -376,44 +373,7 @@ install_stack_workflows() {
             FAILED+=("workflows: $s")
         fi
     done
-
-    # Workflows shipped inside a custom node pack (always match the installed node version)
-    local entry stack rel
-    for entry in "${NODE_WORKFLOWS[@]}"; do
-        IFS='|' read -r stack rel <<< "$entry"
-        files=("$COMFY/custom_nodes/$rel"/*.json)
-        if [ ${#files[@]} -eq 0 ]; then
-            echo "$stack: no workflow JSONs in custom_nodes/$rel"
-            FAILED+=("workflows: $stack (custom_nodes/$rel empty or missing)")
-            continue
-        fi
-        mkdir -p "$wf/$stack"
-        if cp -f "${files[@]}" "$wf/$stack/"; then
-            echo "$stack: installed ${#files[@]} workflow(s) from custom_nodes/$rel -> $wf/$stack"
-        else
-            FAILED+=("workflows: $stack (custom_nodes/$rel)")
-        fi
-    done
     shopt -u nullglob
-
-    # Rewrite text in installed workflows, e.g. a model filename that differs from the one downloaded
-    local old new
-    for entry in "${WORKFLOW_FIXES[@]}"; do
-        IFS='|' read -r stack old new <<< "$entry"
-        [ -d "$wf/$stack" ] || continue
-        python - "$wf/$stack" "$old" "$new" <<'PY' || FAILED+=("workflow fix: $stack ($old)")
-import sys, glob, os
-folder, old, new = sys.argv[1:4]
-changed = 0
-for p in glob.glob(os.path.join(folder, "*.json")):
-    s = open(p, encoding="utf-8").read()
-    if old in s:
-        open(p, "w", encoding="utf-8").write(s.replace(old, new))
-        changed += 1
-print(f"{os.path.basename(folder)}: '{old}' -> '{new}' in {changed} workflow(s)"
-      + ("" if changed else " (not found; workflow may already be updated)"))
-PY
-    done
 }
 
 ### ============================================================

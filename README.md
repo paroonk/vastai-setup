@@ -54,12 +54,6 @@ downloads every stack's models. Set it explicitly in each template.
 Commit the `.json` into `stacks/<name>/`. Next instance installs it under ComfyUI workflows
 `<name>/`. Same-named files there are overwritten.
 
-Stacks can also install workflows that a node pack ships in its own repo:
-`NODE_WORKFLOWS+=("$STACK|<pack>/workflows")` in `stack.sh` copies them to ComfyUI workflows `<stack>/`
-after the nodes are cloned, so they always match the node version.
-`WORKFLOW_FIXES+=("$STACK|old text|new text")` rewrites text in that stack's installed workflows,
-e.g. a model filename that differs from the file the stack downloads.
-
 ## Add a stack
 
 1. Create `stacks/<name>/stack.sh` — copy `stacks/mmh3-dasiwa/stack.sh`, replace the lists.
@@ -67,6 +61,12 @@ e.g. a model filename that differs from the file the stack downloads.
 2. Add its workflow JSONs to the same folder.
 
 No change to `provision.sh`. Models/nodes shared between stacks download once.
+
+## Third-party workflows
+
+`stacks/mmh3-obvpm-timeline/*.json` is from [chanon/comfyui-obvpm-timeline](https://github.com/chanon/comfyui-obvpm-timeline)
+(GPL-3.0), with the latent upscaler filename changed to the file this stack downloads.
+It is a snapshot: when updating the node pack, refresh the JSON from upstream too.
 
 ## Rules
 

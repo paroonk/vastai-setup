@@ -13,12 +13,7 @@ NODES+=(
   "https://github.com/xmarre/ComfyUI-Spectrum-MiniMax-H3"           # Spectrum acceleration
 )
 
-# Workflows ship inside the node pack, so they always match the installed node version.
-NODE_WORKFLOWS+=("$STACK|comfyui-obvpm-timeline/workflows")
-
-# The workflow names "minimax_h3_latent_upscaler_3d_fp16", which the official repo no longer has;
-# point it at the file downloaded below so the node needs no manual selection.
-WORKFLOW_FIXES+=("$STACK|minimax_h3_latent_upscaler_3d_fp16.safetensors|minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors")
+# Workflow saved in this folder from chanon/comfyui-obvpm-timeline (GPL-3.0), upscaler filename fixed.
 
 # Format: "subdir|url"  (filename is taken from the URL)
 MODELS+=(
@@ -28,7 +23,7 @@ MODELS+=(
   "vae|https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_video_vae_fp16.safetensors"
   "vae|https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/vae/minimax_h3_audio_vae_fp32.safetensors"
   "vae_approx|https://huggingface.co/Kijai/MiniMax-H3-TAE/resolve/main/vae_approx/taeh3.safetensors"
-  # Latent upscaler (official, bf16). The workflow names an older "..._3d_fp16" file; see WORKFLOW_FIXES above.
+  # Latent upscaler (official, bf16). The saved workflow points at this file.
   "latent_upscale_models|https://huggingface.co/LBH-123-AI/Minimax_h3_latent_Upscaler/resolve/main/minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors"
   # Turbo LoRAs, in loras/h3/ like the workflow expects
   "loras/h3|https://huggingface.co/lightx2v/Minimax-h3-Turbo/resolve/main/minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors"
