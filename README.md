@@ -22,8 +22,10 @@ Repo holds only `.sh` and workflow `.json`. Models stay on Hugging Face / Civita
 |---|---|---|
 | `mmh3-dasiwa` | MiniMax H3 video + DaSiWa workflows | ~75 GB |
 | `qwen21-multiref` | Qwen Image 2.1 multi-reference editing (bf16) + QwenVL enhancer | ~44 GB |
+| `mmh3-obvpm-timeline` | MiniMax H3 timeline: generate / extend / bridge / upscale (needs ComfyUI 0.35.0+) | ~46 GB (+2.6 GB if mmh3-dasiwa also selected) |
 
-Shared files (llama-cpp, Qwen3.5 GGUF LLM) download once, so `all` is less than the sum.
+Shared files download once, so `all` is less than the sum: llama-cpp and the Qwen3.5 GGUF LLM
+(mmh3-dasiwa, qwen21-multiref); MiniMax H3 model, VAEs, text encoder, upscaler (mmh3-dasiwa, mmh3-obvpm-timeline).
 
 ## Use
 
@@ -51,6 +53,10 @@ downloads every stack's models. Set it explicitly in each template.
 
 Commit the `.json` into `stacks/<name>/`. Next instance installs it under ComfyUI workflows
 `<name>/`. Same-named files there are overwritten.
+
+Stacks can also install workflows that a node pack ships in its own repo:
+`NODE_WORKFLOWS+=("$STACK|<pack>/workflows")` in `stack.sh` copies them to ComfyUI workflows `<stack>/`
+after the nodes are cloned, so they always match the node version.
 
 ## Add a stack
 
