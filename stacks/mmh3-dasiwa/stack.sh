@@ -4,7 +4,6 @@
 # DasiwaMinimaxH3WorkflowsT2VA_cMMH3V25.json: DaSiWa C-MMH3 v2.5 (Civitai), model paths fixed to this stack.
 
 # Each entry is passed to pip unquoted, so an entry may carry its own flags.
-# llama-cpp and the Qwen3.5 GGUF LLM below are also listed in qwen21-multiref; installed once when both are selected.
 PIP_PACKAGES+=(
     "--upgrade --force-reinstall --no-cache-dir https://github.com/JamePeng/llama-cpp-python/releases/download/v0.4.1-cu131-linux-20260926/llama_cpp_python-0.4.1+cu131-cp312-cp312-linux_x86_64.whl"
 )
