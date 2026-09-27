@@ -1,6 +1,6 @@
 # Stack: Qwen Image 2.1 Multi-Reference Editing (huchukato, Civitai v1.1)
 # Sourced by provision.sh. Only add to the lists here; the download engine lives in provision.sh.
-# Workflow zip (Civitai) extracts to ComfyUI workflows/. Any *.json in this folder -> workflows/qwen21/.
+# Workflow zip (Civitai) extracts to ComfyUI workflows/. Any *.json in this folder -> workflows/qwen21-multiref/.
 # Base nodes (rgthree, KJNodes, GGUF) come from provision.sh.
 
 # QwenVL enhancer runs in GGUF mode: vision-capable llama-cpp.

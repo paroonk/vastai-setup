@@ -4,7 +4,7 @@
 #   https://raw.githubusercontent.com/paroonk/vastai-setup/main/provision.sh
 #
 # Template env vars:
-#   STACKS         - which stacks to install: "mmh3-dasiwa", "mmh3-dasiwa,qwen21", or "all" (default: all);
+#   STACKS         - which stacks to install: "mmh3-dasiwa", "mmh3-dasiwa,qwen21-multiref", or "all" (default: all);
 #                    names are case-insensitive
 #                    Each stack = stacks/<name>/stack.sh (nodes, models) + its workflow JSONs.
 #   CIVITAI_TOKEN  - Civitai API key (required for Civitai downloads)
@@ -65,7 +65,7 @@ check_disk() {
     free_gb=$(df -BG --output=avail "$WORKSPACE" | tail -1 | tr -dc '0-9')
     echo "Free disk on $WORKSPACE: ${free_gb} GB"
     if [ "${free_gb:-0}" -lt 100 ]; then
-        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, qwen21 ~44 GB, all ~108 GB. Downloads may fail."
+        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, qwen21-multiref ~44 GB, all ~108 GB. Downloads may fail."
     fi
 }
 

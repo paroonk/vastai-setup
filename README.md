@@ -21,7 +21,7 @@ Repo holds only `.sh` and workflow `.json`. Models stay on Hugging Face / Civita
 | Stack | What | Approx. download |
 |---|---|---|
 | `mmh3-dasiwa` | MiniMax H3 video + DaSiWa workflows | ~75 GB |
-| `qwen21` | Qwen Image 2.1 multi-reference editing (bf16) + QwenVL enhancer | ~44 GB |
+| `qwen21-multiref` | Qwen Image 2.1 multi-reference editing (bf16) + QwenVL enhancer | ~44 GB |
 
 Shared files (llama-cpp, Qwen3.5 GGUF LLM) download once, so `all` is less than the sum.
 
@@ -37,7 +37,7 @@ Template env vars:
 
 | Var | Default | Purpose |
 |---|---|---|
-| `STACKS` | `all` | `mmh3-dasiwa`, `mmh3-dasiwa,qwen21`, or `all` (case-insensitive). Selects nodes, models and workflows together. |
+| `STACKS` | `all` | `mmh3-dasiwa`, `mmh3-dasiwa,qwen21-multiref`, or `all` (case-insensitive). Selects nodes, models and workflows together. |
 | `CIVITAI_TOKEN` | — | Civitai API key. Required for Civitai downloads. |
 | `HF_TOKEN` | — | Only for gated Hugging Face repos. |
 | `TEXT_ENCODER` | `auto` | `nvfp4` (Blackwell) / `int8` / `auto` |
