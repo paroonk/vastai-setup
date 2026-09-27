@@ -25,9 +25,9 @@ MODELS+=(
   "vae_approx|https://huggingface.co/Kijai/MiniMax-H3-TAE/resolve/main/vae_approx/taeh3.safetensors"
   # Latent upscaler (official, bf16). The saved workflow points at this file.
   "latent_upscale_models|https://huggingface.co/LBH-123-AI/Minimax_h3_latent_Upscaler/resolve/main/minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors"
-  # Turbo LoRAs, in loras/h3/ like the workflow expects
-  "loras/h3|https://huggingface.co/lightx2v/Minimax-h3-Turbo/resolve/main/minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors"
-  "loras/h3|https://huggingface.co/Momoking/MiniMax-H3-Turbo-Lora-ComfyUI/resolve/main/minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors"
+  # Turbo LoRAs (loras/ root; workflow paths fixed to match)
+  "loras|https://huggingface.co/lightx2v/Minimax-h3-Turbo/resolve/main/minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors"
+  "loras|https://huggingface.co/Momoking/MiniMax-H3-Turbo-Lora-ComfyUI/resolve/main/minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors"
 )
 
 # Text encoder by GPU, same choice and files as mmh3-dasiwa (TEXT_ENCODER env var).
