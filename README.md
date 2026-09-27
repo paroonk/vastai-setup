@@ -57,6 +57,8 @@ Commit the `.json` into `stacks/<name>/`. Next instance installs it under ComfyU
 Stacks can also install workflows that a node pack ships in its own repo:
 `NODE_WORKFLOWS+=("$STACK|<pack>/workflows")` in `stack.sh` copies them to ComfyUI workflows `<stack>/`
 after the nodes are cloned, so they always match the node version.
+`WORKFLOW_FIXES+=("$STACK|old text|new text")` rewrites text in that stack's installed workflows,
+e.g. a model filename that differs from the file the stack downloads.
 
 ## Add a stack
 
