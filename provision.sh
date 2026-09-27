@@ -158,13 +158,14 @@ install_nodes() {
 # moves into place only on success, so "final file exists" == "download complete".
 download_hf() {
     local url="$1" dest="$2"
-    local repo_id repo_path tmp
+    local repo_id repo_path rev tmp
     repo_id=$(echo "$url" | awk -F/ '{print $4"/"$5}')
     repo_path=$(echo "$url" | sed -E 's#https?://[^/]+/[^/]+/[^/]+/resolve/[^/]+/(.+)#\1#')
+    rev=$(echo "$url" | sed -E 's#https?://[^/]+/[^/]+/[^/]+/resolve/([^/]+)/.*#\1#')   # branch or pinned commit
     tmp="$M/.tmp_hf/${repo_id//\//_}"
     mkdir -p "$tmp"
 
-    HF_XET_HIGH_PERFORMANCE=1 hf download "$repo_id" "$repo_path" --local-dir "$tmp" \
+    HF_XET_HIGH_PERFORMANCE=1 hf download "$repo_id" "$repo_path" --revision "$rev" --local-dir "$tmp" \
         && [ -f "$tmp/$repo_path" ] \
         && mv -f "$tmp/$repo_path" "$dest"
 }
