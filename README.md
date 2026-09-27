@@ -43,7 +43,7 @@ Template env vars:
 | `CIVITAI_TOKEN` | — | Civitai API key. Required for Civitai downloads. |
 | `HF_TOKEN` | — | Only for gated Hugging Face repos. |
 | `TEXT_ENCODER` | `auto` | `nvfp4` (Blackwell) / `int8` / `auto` |
-| `AUTO_UPDATE` | — | `false` skips `git pull` on existing custom nodes |
+| `AUTO_UPDATE` | `true` | `git pull` custom nodes already on disk (e.g. a restarted instance). `false` keeps them. Fresh clones are always latest. |
 | `SETUP_REF` | `main` | Branch/tag to take stacks from — test changes on a branch first |
 
 ⚠️ `STACKS` defaults to `all`: once there are several stacks, an instance without `STACKS`

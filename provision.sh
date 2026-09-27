@@ -10,7 +10,7 @@
 #   CIVITAI_TOKEN  - Civitai API key (required for Civitai downloads)
 #   HF_TOKEN       - HuggingFace token (needed only for gated/private repos)
 #   TEXT_ENCODER   - "nvfp4" | "int8" | "auto" (default auto: nvfp4 on Blackwell, else int8)
-#   AUTO_UPDATE    - "false" to skip git pull on existing custom nodes
+#   AUTO_UPDATE    - "true" (default) git-pulls custom nodes already on disk; "false" keeps them as they are
 #   SETUP_REF      - branch or tag of this repo to use for stacks (default: main)
 #   SETUP_REPO     - repo URL override (default: paroonk/vastai-setup on GitHub)
 
@@ -27,6 +27,7 @@ FAILED=()
 SETUP_REPO="${SETUP_REPO:-https://github.com/paroonk/vastai-setup.git}"
 SETUP_REF="${SETUP_REF:-main}"
 STACKS="${STACKS:-all}"
+AUTO_UPDATE="${AUTO_UPDATE:-true}"
 REPO_DIR="$WORKSPACE/.tmp_setup_repo"
 SELECTED=()   # stacks actually loaded
 
