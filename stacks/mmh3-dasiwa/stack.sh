@@ -1,7 +1,7 @@
 # Stack: MiniMax H3 on ComfyUI
 # Sourced by provision.sh. Only add to the lists here; the download engine lives in provision.sh.
 # Workflows: every *.json in this folder is installed to ComfyUI workflows/mmh3-dasiwa/.
-# DasiwaMinimaxH3WorkflowsT2VA_cMMH3V25.json: DaSiWa C-MMH3 v2.5 (Civitai), model paths fixed to this stack.
+# mmh3-dasiwa_t2va_v2.5.json: DaSiWa C-MMH3 v2.5 (Civitai), model paths fixed to this stack.
 
 # Each entry is passed to pip unquoted, so an entry may carry its own flags.
 PIP_PACKAGES+=(
@@ -26,8 +26,6 @@ MODELS+=(
   # Diffusion models (~21 GB each)
   "diffusion_models|https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_fl2va_pruned_int8_convrot.safetensors"
   "diffusion_models|https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/diffusion_models/minimax_h3_ref2va_pruned_int8_convrot.safetensors"
-  # LoRA
-  "loras|https://huggingface.co/noname1992/loras/resolve/main/MysticXXX_MMH3-V1.safetensors"
   # Latent upscaler
   "latent_upscale_models|https://huggingface.co/LBH-123-AI/Minimax_h3_latent_Upscaler/resolve/main/minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors"
   # Frame interpolation
@@ -48,8 +46,6 @@ MODELS+=(
 CIVITAI+=(
   # DaSiWa MiniMax H3 checkpoint (DaSiWa Hybrid v2)
   "diffusion_models|https://civitai.red/api/download/models/3314675?fileId=3203130"
-  # Minimax H3 Turbo LoRA (turbo-multistep-v2)
-  "loras|https://civitai.red/api/download/models/3357658?fileId=3245274"
 )
 
 # Text encoder by GPU. TEXT_ENCODER = "nvfp4" | "int8" | "auto" (default: nvfp4 on Blackwell, else int8)

@@ -1,0 +1,1713 @@
+{
+  "id": "9eaa7d4c-85da-4c3b-9bc2-1c9b2c8c6f47",
+  "revision": 2,
+  "last_node_id": 483,
+  "last_link_id": 743,
+  "nodes": [
+    {
+      "id": 13,
+      "type": "ResolutionSelector",
+      "pos": [
+        50,
+        740
+      ],
+      "size": [
+        320,
+        190
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "showAdvanced": true,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "width",
+          "type": "INT",
+          "links": [
+            670
+          ]
+        },
+        {
+          "name": "height",
+          "type": "INT",
+          "links": [
+            671
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "ResolutionSelector"
+      },
+      "widgets_values": [
+        "2:3 (Portrait Photo)",
+        1,
+        32
+      ],
+      "widgets_values_named": {
+        "aspect_ratio": "2:3 (Portrait Photo)",
+        "megapixels": 1,
+        "multiple": 32
+      },
+      "title": "Custom Output Resolution"
+    },
+    {
+      "id": 451,
+      "type": "UNETLoader",
+      "pos": [
+        550,
+        100
+      ],
+      "size": [
+        460,
+        100
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "unet_name",
+          "name": "unet_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "unet_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "モデル",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            688
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "UNETLoader",
+        "models": [
+          {
+            "name": "qwen_image_2.1_bf16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_bf16.safetensors",
+            "directory": "diffusion_models"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen_image_2.1_bf16.safetensors",
+        "default"
+      ],
+      "widgets_values_named": {
+        "unet_name": "qwen_image_2.1_bf16.safetensors",
+        "weight_dtype": "default"
+      },
+      "title": "Qwen-Image-2.1 Diffusion Model"
+    },
+    {
+      "id": 453,
+      "type": "CLIPLoader",
+      "pos": [
+        550,
+        250
+      ],
+      "size": [
+        460,
+        130
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip名",
+          "name": "clip_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "clip_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "CLIP",
+          "name": "CLIP",
+          "type": "CLIP",
+          "links": [
+            721
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "CLIPLoader",
+        "models": [
+          {
+            "name": "qwen3vl_8b_bf16_heretic.safetensors",
+            "url": "https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic/resolve/main/qwen3vl_8b_bf16_heretic.safetensors",
+            "directory": "text_encoders"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen3vl_8b_bf16_heretic.safetensors",
+        "qwen_image",
+        "default"
+      ],
+      "widgets_values_named": {
+        "clip_name": "qwen3vl_8b_bf16_heretic.safetensors",
+        "type": "qwen_image",
+        "device": "default"
+      },
+      "title": "Qwen3-VL Text Encoder"
+    },
+    {
+      "id": 454,
+      "type": "VAELoader",
+      "pos": [
+        550,
+        430
+      ],
+      "size": [
+        460,
+        90
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "vae_name",
+          "name": "vae_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "vae_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "VAE",
+          "name": "VAE",
+          "type": "VAE",
+          "links": [
+            649,
+            720
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "VAELoader",
+        "models": [
+          {
+            "name": "qwen_image_2.1_vae_bf16.safetensors",
+            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors",
+            "directory": "vae"
+          }
+        ]
+      },
+      "widgets_values": [
+        "qwen_image_2.1_vae_bf16.safetensors"
+      ],
+      "widgets_values_named": {
+        "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
+      },
+      "title": "Qwen-Image-2.1 VAE"
+    },
+    {
+      "id": 456,
+      "type": "EmptyLatentImage",
+      "pos": [
+        1190,
+        680
+      ],
+      "size": [
+        330,
+        140
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "幅",
+          "name": "width",
+          "type": "INT",
+          "widget": {
+            "name": "width"
+          },
+          "link": 670
+        },
+        {
+          "localized_name": "高さ",
+          "name": "height",
+          "type": "INT",
+          "widget": {
+            "name": "height"
+          },
+          "link": 671
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "潜在",
+          "name": "LATENT",
+          "type": "LATENT",
+          "links": [
+            684
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "EmptyLatentImage"
+      },
+      "widgets_values": [
+        1024,
+        1024,
+        1
+      ],
+      "widgets_values_named": {
+        "width": 1024,
+        "height": 1024,
+        "batch_size": 1
+      },
+      "title": "Optional Custom-Size Latent"
+    },
+    {
+      "id": 457,
+      "type": "VAEDecode",
+      "pos": [
+        3350,
+        110
+      ],
+      "size": [
+        300,
+        100
+      ],
+      "flags": {},
+      "order": 14,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "サンプル",
+          "name": "samples",
+          "type": "LATENT",
+          "link": 651
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "type": "VAE",
+          "link": 649
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "画像",
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            672
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "VAEDecode"
+      },
+      "title": "Final VAE Decode"
+    },
+    {
+      "id": 461,
+      "type": "SaveImageAdvanced",
+      "pos": [
+        3700,
+        110
+      ],
+      "size": [
+        480,
+        520
+      ],
+      "flags": {},
+      "order": 15,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 672
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            708
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "SaveImageAdvanced"
+      },
+      "widgets_values": [
+        "Qwen_Image_2.1_Dual_CFG_Edit",
+        "png",
+        "8-bit",
+        "sRGB"
+      ],
+      "widgets_values_named": {
+        "filename_prefix": "Qwen_Image_2.1_Dual_CFG_Edit",
+        "format": "png",
+        "format.bit_depth": "8-bit",
+        "format.input_color_space": "sRGB"
+      },
+      "title": "Save Final Image"
+    },
+    {
+      "id": 463,
+      "type": "MarkdownNote",
+      "pos": [
+        40,
+        1340
+      ],
+      "size": [
+        780,
+        240
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Usage: Dual CFG",
+      "properties": {},
+      "widgets_values": [
+        "## Qwen-Image-2.1 Image Edit — Dual CFG v1.0\n\nThis is an **Image Edit** workflow. Replace the source image in the left-side Load Image node; do not switch it to the empty latent path.\n\n### Default sampling settings\n- Total Steps: 25\n- Stage 1 CFG: 1.5\n- Stage 2 CFG: 3.0\n- Sigma Split: step 15 = 60 / 40\n- Stage 1 Sampler: Euler, add_noise on\n- Stage 2 Sampler: Euler, add_noise off\n- Seed: change only in Stage 1\n\nStage 1 output is passed directly into Stage 2. Stage 2 must not add fresh noise. SplitSigmas.step is an absolute step count, so adjust it manually if Total Steps changes."
+      ],
+      "widgets_values_named": {
+        "text": "## Qwen-Image-2.1 Image Edit — Dual CFG v1.0\n\nThis is an **Image Edit** workflow. Replace the source image in the left-side Load Image node; do not switch it to the empty latent path.\n\n### Default sampling settings\n- Total Steps: 25\n- Stage 1 CFG: 1.5\n- Stage 2 CFG: 3.0\n- Sigma Split: step 15 = 60 / 40\n- Stage 1 Sampler: Euler, add_noise on\n- Stage 2 Sampler: Euler, add_noise off\n- Seed: change only in Stage 1\n\nStage 1 output is passed directly into Stage 2. Stage 2 must not add fresh noise. SplitSigmas.step is an absolute step count, so adjust it manually if Total Steps changes."
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 468,
+      "type": "ComfySwitchNode",
+      "pos": [
+        1190,
+        860
+      ],
+      "size": [
+        350,
+        100
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "偽の場合",
+          "name": "on_false",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 724
+        },
+        {
+          "localized_name": "真の場合",
+          "name": "on_true",
+          "shape": 7,
+          "type": "LATENT",
+          "link": 684
+        },
+        {
+          "localized_name": "スイッチ",
+          "name": "switch",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "switch"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "出力",
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            682
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "ComfySwitchNode"
+      },
+      "widgets_values": [
+        false
+      ],
+      "widgets_values_named": {
+        "switch": false
+      },
+      "title": "Image Edit / Custom-Size Latent Switch"
+    },
+    {
+      "id": 469,
+      "type": "QwenImage21Cache",
+      "pos": [
+        550,
+        580
+      ],
+      "size": [
+        360,
+        110
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 688
+        },
+        {
+          "localized_name": "device",
+          "name": "device",
+          "type": "COMBO",
+          "widget": {
+            "name": "device"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "dtype",
+          "name": "dtype",
+          "type": "COMBO",
+          "widget": {
+            "name": "dtype"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "モデル",
+          "name": "MODEL",
+          "type": "MODEL",
+          "links": [
+            731,
+            737,
+            738
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "QwenImage21Cache"
+      },
+      "widgets_values": [
+        "auto",
+        "default"
+      ],
+      "widgets_values_named": {
+        "device": "auto",
+        "dtype": "default"
+      },
+      "title": "Qwen-Image-2.1 Cache"
+    },
+    {
+      "id": 470,
+      "type": "LoadImage",
+      "pos": [
+        50,
+        100
+      ],
+      "size": [
+        320,
+        360
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            704,
+            707
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "qwen_dual_cfg_sample_before.jpg",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "qwen_dual_cfg_sample_before.jpg",
+        "upload": "image"
+      },
+      "title": "Source Image — Replace With Your Edit Target"
+    },
+    {
+      "id": 472,
+      "type": "ImageCompare",
+      "pos": [
+        4230,
+        110
+      ],
+      "size": [
+        520,
+        520
+      ],
+      "flags": {},
+      "order": 16,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image_a",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 707
+        },
+        {
+          "name": "image_b",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 708
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "ImageCompare"
+      },
+      "widgets_values": [],
+      "widgets_values_named": {},
+      "title": "Compare Source / Final"
+    },
+    {
+      "id": 474,
+      "type": "TextEncodeQwenImage21",
+      "pos": [
+        1190,
+        100
+      ],
+      "size": [
+        500,
+        520
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "clip",
+          "name": "clip",
+          "type": "CLIP",
+          "link": 721
+        },
+        {
+          "localized_name": "vae",
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": 720
+        },
+        {
+          "localized_name": "prompt",
+          "name": "prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "negative_prompt",
+          "name": "negative_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "negative_prompt"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "resolution",
+          "name": "resolution",
+          "type": "INT",
+          "widget": {
+            "name": "resolution"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "image_1",
+          "name": "images.image_1",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 704
+        },
+        {
+          "localized_name": "image_2",
+          "name": "images.image_2",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": 728
+        },
+        {
+          "localized_name": "image_3",
+          "name": "images.image_3",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_4",
+          "name": "images.image_4",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_5",
+          "name": "images.image_5",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_6",
+          "name": "images.image_6",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_7",
+          "name": "images.image_7",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_8",
+          "name": "images.image_8",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_9",
+          "name": "images.image_9",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_10",
+          "name": "images.image_10",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_11",
+          "name": "images.image_11",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "localized_name": "image_12",
+          "name": "images.image_12",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "links": [
+            739,
+            741
+          ]
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "links": [
+            740,
+            742
+          ]
+        },
+        {
+          "localized_name": "latent",
+          "name": "latent",
+          "type": "LATENT",
+          "links": [
+            724
+          ]
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "TextEncodeQwenImage21"
+      },
+      "widgets_values": [
+        "Edit <image1> only to repair malformed fingers, hands, toes, and feet. Reconstruct them with anatomically correct proportions, natural joint placement, five distinct fingers on each visible hand, and five distinct toes on each visible foot. Make the fingertips, fingernails, toe tips, and toenails clean and realistic, with no fused, duplicated, missing, twisted, or extra digits. Preserve the original person’s identity, face, hairstyle, body shape, pose, clothing, composition, camera angle, background, lighting, colors, and visual style. Do not change any area except the hands, fingers, feet, and toes. Blend the repaired areas seamlessly into the original image.",
+        "",
+        0
+      ],
+      "widgets_values_named": {
+        "prompt": "Edit <image1> only to repair malformed fingers, hands, toes, and feet. Reconstruct them with anatomically correct proportions, natural joint placement, five distinct fingers on each visible hand, and five distinct toes on each visible foot. Make the fingertips, fingernails, toe tips, and toenails clean and realistic, with no fused, duplicated, missing, twisted, or extra digits. Preserve the original person’s identity, face, hairstyle, body shape, pose, clothing, composition, camera angle, background, lighting, colors, and visual style. Do not change any area except the hands, fingers, feet, and toes. Blend the repaired areas seamlessly into the original image.",
+        "negative_prompt": "",
+        "resolution": 0
+      },
+      "title": "Qwen-Image-2.1 Image Edit Conditioning"
+    },
+    {
+      "id": 475,
+      "type": "LoadImage",
+      "pos": [
+        50,
+        520
+      ],
+      "size": [
+        320,
+        160
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 4,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            728
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": []
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "",
+        "image"
+      ],
+      "widgets_values_named": {
+        "image": "",
+        "upload": "image"
+      },
+      "title": "Optional Additional Reference — Bypassed"
+    },
+    {
+      "id": 476,
+      "type": "MarkdownNote",
+      "pos": [
+        860,
+        1340
+      ],
+      "size": [
+        780,
+        240
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "Reference: Models and Files",
+      "properties": {},
+      "widgets_values": [
+        "## Requirements\n\nUse a current ComfyUI build with Qwen-Image-2.1 support. No third-party custom nodes are required by this workflow.\n\n### Model files\n- diffusion_models/qwen_image_2.1_bf16.safetensors\n- text_encoders/qwen3vl_8b_bf16.safetensors\n- vae/qwen_image_2.1_vae_bf16.safetensors\n\nModels: https://huggingface.co/Comfy-Org/Qwen-Image-2.1\n\n### Sample image\nCopy qwen_dual_cfg_sample_before.jpg into ComfyUI/input, or select your own image in the source Load Image node.\n\nThe optional second reference node is bypassed by default."
+      ],
+      "widgets_values_named": {
+        "text": "## Requirements\n\nUse a current ComfyUI build with Qwen-Image-2.1 support. No third-party custom nodes are required by this workflow.\n\n### Model files\n- diffusion_models/qwen_image_2.1_bf16.safetensors\n- text_encoders/qwen3vl_8b_bf16.safetensors\n- vae/qwen_image_2.1_vae_bf16.safetensors\n\nModels: https://huggingface.co/Comfy-Org/Qwen-Image-2.1\n\n### Sample image\nCopy qwen_dual_cfg_sample_before.jpg into ComfyUI/input, or select your own image in the source Load Image node.\n\nThe optional second reference node is bypassed by default."
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    },
+    {
+      "id": 477,
+      "type": "BasicScheduler",
+      "pos": [
+        1870,
+        100
+      ],
+      "size": [
+        320,
+        180
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 731
+        },
+        {
+          "localized_name": "scheduler",
+          "name": "scheduler",
+          "type": "COMBO",
+          "widget": {
+            "name": "scheduler"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "steps",
+          "name": "steps",
+          "type": "INT",
+          "widget": {
+            "name": "steps"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "denoise",
+          "name": "denoise",
+          "type": "FLOAT",
+          "widget": {
+            "name": "denoise"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "SIGMAS",
+          "name": "SIGMAS",
+          "type": "SIGMAS",
+          "links": [
+            732
+          ]
+        }
+      ],
+      "title": "Total Sigma Schedule — 25 Steps",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "BasicScheduler"
+      },
+      "widgets_values": [
+        "simple",
+        25,
+        1
+      ],
+      "widgets_values_named": {
+        "scheduler": "simple",
+        "steps": 25,
+        "denoise": 1
+      }
+    },
+    {
+      "id": 478,
+      "type": "SplitSigmas",
+      "pos": [
+        1870,
+        340
+      ],
+      "size": [
+        320,
+        140
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "sigmas",
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 732
+        },
+        {
+          "localized_name": "step",
+          "name": "step",
+          "type": "INT",
+          "widget": {
+            "name": "step"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "high_sigmas",
+          "name": "high_sigmas",
+          "type": "SIGMAS",
+          "links": [
+            733
+          ]
+        },
+        {
+          "localized_name": "low_sigmas",
+          "name": "low_sigmas",
+          "type": "SIGMAS",
+          "links": [
+            734
+          ]
+        }
+      ],
+      "title": "Sigma Split — 15 / 10 Steps",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "SplitSigmas"
+      },
+      "widgets_values": [
+        15
+      ],
+      "widgets_values_named": {
+        "step": 15
+      }
+    },
+    {
+      "id": 479,
+      "type": "KSamplerSelect",
+      "pos": [
+        1870,
+        550
+      ],
+      "size": [
+        320,
+        120
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "SAMPLER",
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            735
+          ]
+        }
+      ],
+      "title": "Stage 1 Sampler",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "KSamplerSelect"
+      },
+      "widgets_values": [
+        "euler"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "euler"
+      }
+    },
+    {
+      "id": 480,
+      "type": "KSamplerSelect",
+      "pos": [
+        1870,
+        720
+      ],
+      "size": [
+        320,
+        120
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "localized_name": "sampler_name",
+          "name": "sampler_name",
+          "type": "COMBO",
+          "widget": {
+            "name": "sampler_name"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "SAMPLER",
+          "name": "SAMPLER",
+          "type": "SAMPLER",
+          "links": [
+            736
+          ]
+        }
+      ],
+      "title": "Stage 2 Sampler",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "KSamplerSelect"
+      },
+      "widgets_values": [
+        "euler"
+      ],
+      "widgets_values_named": {
+        "sampler_name": "euler"
+      }
+    },
+    {
+      "id": 481,
+      "type": "SamplerCustom",
+      "pos": [
+        2375,
+        100
+      ],
+      "size": [
+        350,
+        430
+      ],
+      "flags": {},
+      "order": 12,
+      "mode": 0,
+      "showAdvanced": false,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 737
+        },
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 739
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 740
+        },
+        {
+          "localized_name": "sampler",
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 735
+        },
+        {
+          "localized_name": "sigmas",
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 733
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 682
+        },
+        {
+          "localized_name": "add_noise",
+          "name": "add_noise",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "add_noise"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "noise_seed",
+          "name": "noise_seed",
+          "type": "INT",
+          "widget": {
+            "name": "noise_seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            743
+          ]
+        },
+        {
+          "localized_name": "denoised_output",
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "title": "Stage 1 — CFG 1.5 / Initial Noise",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "SamplerCustom"
+      },
+      "widgets_values": [
+        true,
+        208992148097629,
+        "fixed",
+        1.5
+      ],
+      "widgets_values_named": {
+        "add_noise": true,
+        "noise_seed": 208992148097629,
+        "control_after_generate": "fixed",
+        "cfg": 1.5
+      }
+    },
+    {
+      "id": 482,
+      "type": "SamplerCustom",
+      "pos": [
+        2875,
+        100
+      ],
+      "size": [
+        350,
+        430
+      ],
+      "flags": {},
+      "order": 13,
+      "mode": 0,
+      "showAdvanced": false,
+      "inputs": [
+        {
+          "localized_name": "model",
+          "name": "model",
+          "type": "MODEL",
+          "link": 738
+        },
+        {
+          "localized_name": "positive",
+          "name": "positive",
+          "type": "CONDITIONING",
+          "link": 741
+        },
+        {
+          "localized_name": "negative",
+          "name": "negative",
+          "type": "CONDITIONING",
+          "link": 742
+        },
+        {
+          "localized_name": "sampler",
+          "name": "sampler",
+          "type": "SAMPLER",
+          "link": 736
+        },
+        {
+          "localized_name": "sigmas",
+          "name": "sigmas",
+          "type": "SIGMAS",
+          "link": 734
+        },
+        {
+          "localized_name": "latent_image",
+          "name": "latent_image",
+          "type": "LATENT",
+          "link": 743
+        },
+        {
+          "localized_name": "add_noise",
+          "name": "add_noise",
+          "type": "BOOLEAN",
+          "widget": {
+            "name": "add_noise"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "noise_seed",
+          "name": "noise_seed",
+          "type": "INT",
+          "widget": {
+            "name": "noise_seed"
+          },
+          "link": null
+        },
+        {
+          "localized_name": "cfg",
+          "name": "cfg",
+          "type": "FLOAT",
+          "widget": {
+            "name": "cfg"
+          },
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "localized_name": "output",
+          "name": "output",
+          "type": "LATENT",
+          "links": [
+            651
+          ]
+        },
+        {
+          "localized_name": "denoised_output",
+          "name": "denoised_output",
+          "type": "LATENT",
+          "links": []
+        }
+      ],
+      "title": "Stage 2 — CFG 3.0 / No Fresh Noise",
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.37.0",
+        "Node name for S&R": "SamplerCustom"
+      },
+      "widgets_values": [
+        false,
+        0,
+        "fixed",
+        3
+      ],
+      "widgets_values_named": {
+        "add_noise": false,
+        "noise_seed": 0,
+        "control_after_generate": "fixed",
+        "cfg": 3
+      }
+    },
+    {
+      "id": 483,
+      "type": "MarkdownNote",
+      "pos": [
+        1680,
+        1340
+      ],
+      "size": [
+        780,
+        240
+      ],
+      "flags": {},
+      "order": 17,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "title": "プロンプト（Repair Prompt Presets）",
+      "properties": {},
+      "widgets_values": [
+        "## 手と足の破綻を修正するプロンプト\n\n~~~text\nEdit <image1> only to repair the malformed fingers, hands, toes, and feet. Reconstruct them with anatomically correct proportions, natural joint placement, five distinct fingers on each visible hand, and five distinct toes on each visible foot. Make the fingertips, fingernails, toe tips, and toenails clean and realistic, with no fused, duplicated, missing, twisted, or extra digits. Preserve the original person’s identity, face, hairstyle, body shape, pose, clothing, composition, camera angle, background, lighting, colors, and visual style exactly. Do not change any area except the hands, fingers, feet, and toes. Blend the repaired areas seamlessly into the original image.\n~~~\n\n## 手と指先だけの破綻を修正するプロンプト\n\n~~~text\nEdit <image1> only to repair the malformed fingers and hands. Reconstruct them with anatomically correct proportions, natural joint placement, and five distinct fingers on each visible hand. Make the fingertips and fingernails clean and realistic, with no fused, duplicated, missing, twisted, or extra fingers. Preserve the original person’s identity, face, hairstyle, body shape, pose, clothing, composition, camera angle, background, lighting, colors, and visual style exactly. Do not change any area except the hands and fingers. Blend the repaired areas seamlessly into the original image.\n~~~"
+      ],
+      "widgets_values_named": {
+        "text": "## 手と足の破綻を修正するプロンプト\n\n~~~text\nEdit <image1> only to repair the malformed fingers, hands, toes, and feet. Reconstruct them with anatomically correct proportions, natural joint placement, five distinct fingers on each visible hand, and five distinct toes on each visible foot. Make the fingertips, fingernails, toe tips, and toenails clean and realistic, with no fused, duplicated, missing, twisted, or extra digits. Preserve the original person’s identity, face, hairstyle, body shape, pose, clothing, composition, camera angle, background, lighting, colors, and visual style exactly. Do not change any area except the hands, fingers, feet, and toes. Blend the repaired areas seamlessly into the original image.\n~~~\n\n## 手と指先だけの破綻を修正するプロンプト\n\n~~~text\nEdit <image1> only to repair the malformed fingers and hands. Reconstruct them with anatomically correct proportions, natural joint placement, and five distinct fingers on each visible hand. Make the fingertips and fingernails clean and realistic, with no fused, duplicated, missing, twisted, or extra fingers. Preserve the original person’s identity, face, hairstyle, body shape, pose, clothing, composition, camera angle, background, lighting, colors, and visual style exactly. Do not change any area except the hands and fingers. Blend the repaired areas seamlessly into the original image.\n~~~"
+      },
+      "color": "#222",
+      "bgcolor": "#000"
+    }
+  ],
+  "links": [
+    [
+      649,
+      454,
+      0,
+      457,
+      1,
+      "VAE"
+    ],
+    [
+      651,
+      482,
+      0,
+      457,
+      0,
+      "LATENT"
+    ],
+    [
+      670,
+      13,
+      0,
+      456,
+      0,
+      "INT"
+    ],
+    [
+      671,
+      13,
+      1,
+      456,
+      1,
+      "INT"
+    ],
+    [
+      672,
+      457,
+      0,
+      461,
+      0,
+      "IMAGE"
+    ],
+    [
+      682,
+      468,
+      0,
+      481,
+      5,
+      "LATENT"
+    ],
+    [
+      684,
+      456,
+      0,
+      468,
+      1,
+      "LATENT"
+    ],
+    [
+      688,
+      451,
+      0,
+      469,
+      0,
+      "MODEL"
+    ],
+    [
+      704,
+      470,
+      0,
+      474,
+      5,
+      "IMAGE"
+    ],
+    [
+      707,
+      470,
+      0,
+      472,
+      0,
+      "IMAGE"
+    ],
+    [
+      708,
+      461,
+      0,
+      472,
+      1,
+      "IMAGE"
+    ],
+    [
+      720,
+      454,
+      0,
+      474,
+      1,
+      "VAE"
+    ],
+    [
+      721,
+      453,
+      0,
+      474,
+      0,
+      "CLIP"
+    ],
+    [
+      724,
+      474,
+      2,
+      468,
+      0,
+      "LATENT"
+    ],
+    [
+      728,
+      475,
+      0,
+      474,
+      6,
+      "IMAGE"
+    ],
+    [
+      731,
+      469,
+      0,
+      477,
+      0,
+      "MODEL"
+    ],
+    [
+      732,
+      477,
+      0,
+      478,
+      0,
+      "SIGMAS"
+    ],
+    [
+      733,
+      478,
+      0,
+      481,
+      4,
+      "SIGMAS"
+    ],
+    [
+      734,
+      478,
+      1,
+      482,
+      4,
+      "SIGMAS"
+    ],
+    [
+      735,
+      479,
+      0,
+      481,
+      3,
+      "SAMPLER"
+    ],
+    [
+      736,
+      480,
+      0,
+      482,
+      3,
+      "SAMPLER"
+    ],
+    [
+      737,
+      469,
+      0,
+      481,
+      0,
+      "MODEL"
+    ],
+    [
+      738,
+      469,
+      0,
+      482,
+      0,
+      "MODEL"
+    ],
+    [
+      739,
+      474,
+      0,
+      481,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      740,
+      474,
+      1,
+      481,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      741,
+      474,
+      0,
+      482,
+      1,
+      "CONDITIONING"
+    ],
+    [
+      742,
+      474,
+      1,
+      482,
+      2,
+      "CONDITIONING"
+    ],
+    [
+      743,
+      481,
+      0,
+      482,
+      5,
+      "LATENT"
+    ]
+  ],
+  "groups": [
+    {
+      "id": 1,
+      "title": "1 — INPUTS",
+      "bounding": [
+        0,
+        0,
+        420,
+        1000
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 2,
+      "title": "2 — QWEN MODELS",
+      "bounding": [
+        500,
+        0,
+        560,
+        760
+      ],
+      "color": "#765d9e",
+      "flags": {}
+    },
+    {
+      "id": 3,
+      "title": "3 — IMAGE EDIT CONDITIONING + LATENT",
+      "bounding": [
+        1140,
+        0,
+        600,
+        1020
+      ],
+      "color": "#4f8a68",
+      "flags": {}
+    },
+    {
+      "id": 4,
+      "title": "4 — SIGMA SCHEDULE + SAMPLER CONTROLS",
+      "bounding": [
+        1820,
+        0,
+        420,
+        900
+      ],
+      "color": "#9a6a3a",
+      "flags": {}
+    },
+    {
+      "id": 5,
+      "title": "5 — STAGE 1 / LOW CFG",
+      "bounding": [
+        2325,
+        0,
+        450,
+        600
+      ],
+      "color": "#8c6d31",
+      "flags": {}
+    },
+    {
+      "id": 6,
+      "title": "6 — STAGE 2 / HIGH CFG",
+      "bounding": [
+        2825,
+        0,
+        450,
+        600
+      ],
+      "color": "#9a4f67",
+      "flags": {}
+    },
+    {
+      "id": 7,
+      "title": "7 — FINAL DECODE + OUTPUT",
+      "bounding": [
+        3300,
+        0,
+        1500,
+        700
+      ],
+      "color": "#3f789e",
+      "flags": {}
+    },
+    {
+      "id": 8,
+      "title": "NOTES / REFERENCES",
+      "bounding": [
+        0,
+        1270,
+        2500,
+        380
+      ],
+      "color": "#666666",
+      "flags": {}
+    }
+  ],
+  "definitions": {
+    "subgraphs": []
+  },
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5,
+      "offset": [
+        80,
+        80
+      ]
+    },
+    "frontendVersion": "1.53.6",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}

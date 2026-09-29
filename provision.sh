@@ -4,13 +4,16 @@
 #   https://raw.githubusercontent.com/paroonk/vastai-setup/main/provision.sh
 #
 # Template env vars:
-#   STACKS         - which stacks to install: "mmh3-dasiwa", "mmh3-dasiwa,qwen21-art", or "all" (default: all);
+#   STACKS         - which stacks to install: "mmh3-dasiwa", "mmh3-dasiwa,qwen21-outpaint", a family name ("qwen21" = every qwen21-* stack, "mmh3" likewise), or "all" (default: all);
 #                    names are case-insensitive
 #                    Each stack = stacks/<name>/stack.sh (nodes, models) + its workflow JSONs.
 #   CIVITAI_TOKEN  - Civitai API key (required for Civitai downloads)
 #   HF_TOKEN       - HuggingFace token (needed only for gated/private repos)
 #   TEXT_ENCODER   - "nvfp4" | "int8" | "auto" (default auto: nvfp4 on Blackwell, else int8)
 #   AUTO_UPDATE    - "true" (default) git-pulls custom nodes already on disk; "false" keeps them as they are
+#   QUIET_LOG      - "true" (default) pauses Vast's ComfyUI/api-wrapper services while provisioning, so the
+#                    log is not flooded with "startup paused..." every 5 s; they are restarted at the end.
+#                    "false" leaves them alone.
 #   SETUP_REF      - branch or tag of this repo to use for stacks (default: main)
 #   SETUP_REPO     - repo URL override (default: paroonk/vastai-setup on GitHub)
 
@@ -62,12 +65,63 @@ LINKS=()      # "link|target", both relative to models/: expose one downloaded f
 
 log() { echo -e "\n==========================================\n$*\n=========================================="; }
 
+# ---- progress reporting ----
+# Steps print "[n/N] ..." with timing; /workspace/provision-status.txt always holds the current state
+# (Vast's web log is interleaved with its own "startup paused" lines: `cat` the status file instead).
+STATUS_FILE="$WORKSPACE/provision-status.txt"
+PROV_T0=$(date +%s); STEP_N=0; STEP_TOTAL=9; STEP_NAME=""; STEP_T0=$PROV_T0
+PLAN_BYTES=0; DONE_BYTES=0; declare -A SIZE_OF=()
+fmt_dur() { local s=$1; printf '%dm%02ds' $((s/60)) $((s%60)); }
+gb()      { awk -v b="${1:-0}" 'BEGIN{printf "%.1f", b/1e9}'; }
+status()  { printf '%s  %s\n' "$(date '+%H:%M:%S')" "$*" > "$STATUS_FILE" 2>/dev/null || true; }
+step_done() {
+    [ -n "$STEP_NAME" ] && echo "✓ [$STEP_N/$STEP_TOTAL] $STEP_NAME — done in $(fmt_dur $(( $(date +%s) - STEP_T0 )))"
+    return 0
+}
+step() {
+    step_done
+    STEP_N=$((STEP_N+1)); STEP_NAME="$*"; STEP_T0=$(date +%s)
+    log "[$STEP_N/$STEP_TOTAL] $*"
+    status "[$STEP_N/$STEP_TOTAL] $*"
+}
+# Size of a remote file in bytes (0 if unknown). HF answers HEAD with x-linked-size.
+remote_size() {
+    local url="$1" auth="${2:-}" h s
+    if [ -n "$auth" ]; then h=$(curl -sIL --max-time 20 -H "$auth" "$url" 2>/dev/null)
+    else h=$(curl -sIL --max-time 20 "$url" 2>/dev/null); fi
+    h=$(printf '%s' "$h" | tr -d '\r' | tr 'A-Z' 'a-z')
+    s=$(printf '%s\n' "$h" | awk -F': ' '$1=="x-linked-size"{v=$2} END{print v}')
+    [ -z "$s" ] && s=$(printf '%s\n' "$h" | awk -F': ' '$1=="content-length"{v=$2} END{print v}')
+    [[ "$s" =~ ^[0-9]+$ ]] && echo "$s" || echo 0
+}
+# Look up sizes of everything still to download, so each file can show "x / total GB".
+plan_downloads() {
+    local entry subdir url name target fname key dest n=0 have=0 unknown=0 sz hfauth=""
+    [ -n "${HF_TOKEN:-}" ] && hfauth="Authorization: Bearer $HF_TOKEN"
+    status "[$STEP_N/$STEP_TOTAL] checking sizes of files to download"
+    for entry in "${MODELS[@]}"; do
+        IFS='|' read -r subdir url <<< "$entry"; name="${url##*/}"
+        if [ -f "$M/$subdir/$name" ]; then have=$((have+1)); continue; fi
+        if [[ "$url" =~ ^https://huggingface\.co/ ]]; then sz=$(remote_size "$url" "$hfauth"); else sz=$(remote_size "$url"); fi
+        SIZE_OF["$entry"]=$sz; PLAN_BYTES=$((PLAN_BYTES+sz)); n=$((n+1)); [ "$sz" -eq 0 ] && unknown=$((unknown+1))
+    done
+    for entry in "${CIVITAI[@]}"; do
+        IFS='|' read -r target url fname <<< "$entry"
+        if [ "$target" = "workflows" ]; then dest="$COMFY/user/default/workflows"; else dest="$M/$target"; fi
+        key=$(echo -n "$url" | md5sum | cut -c1-12)
+        if [ -f "$dest/.civitai_${key}.done" ]; then have=$((have+1)); continue; fi
+        sz=0; [ -n "${CIVITAI_TOKEN:-}" ] && sz=$(remote_size "$url" "Authorization: Bearer $CIVITAI_TOKEN")
+        SIZE_OF["$entry"]=$sz; PLAN_BYTES=$((PLAN_BYTES+sz)); n=$((n+1)); [ "$sz" -eq 0 ] && unknown=$((unknown+1))
+    done
+    echo "Download plan: $n file(s), $(gb $PLAN_BYTES) GB$([ $unknown -gt 0 ] && echo " (+$unknown of unknown size)"); $have already present."
+}
+
 check_disk() {
     local free_gb
     free_gb=$(df -BG --output=avail "$WORKSPACE" | tail -1 | tr -dc '0-9')
     echo "Free disk on $WORKSPACE: ${free_gb} GB"
     if [ "${free_gb:-0}" -lt 100 ]; then
-        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, qwen21-art ~52 GB, qwen21-inpainting ~45 GB, mmh3-obvpm-timeline ~50 GB, all ~135 GB. Downloads may fail."
+        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, mmh3-obvpm-timeline ~50 GB, each qwen21 stack ~35-45 GB (32 GB shared), all ~150 GB (estimate). Downloads may fail."
     fi
 }
 
@@ -135,10 +189,13 @@ update_comfyui() {
 
 install_nodes() {
     mkdir -p "$COMFY/custom_nodes"
+    local k=0
     for repo in "${NODES[@]}"; do
         local name="${repo##*/}"
         local path="$COMFY/custom_nodes/$name"
-        log "Custom node: $name"
+        k=$((k+1))
+        echo -e "\n--- [node $k/${#NODES[@]}] $name"
+        status "[$STEP_N/$STEP_TOTAL] Custom nodes $k/${#NODES[@]}: $name"
 
         if [ -d "$path/.git" ]; then
             if [ "${AUTO_UPDATE,,}" = "false" ]; then
@@ -179,6 +236,8 @@ download_wget() {
 }
 
 download_models() {
+    local total=0 k=0 e
+    for e in "${MODELS[@]}"; do [ -n "${SIZE_OF["$e"]+x}" ] && total=$((total+1)); done
     for entry in "${MODELS[@]}"; do
         IFS='|' read -r subdir url <<< "$entry"
         local name="${url##*/}"
@@ -190,7 +249,9 @@ download_models() {
             continue
         fi
 
-        log "Downloading: $subdir/$name"
+        k=$((k+1)); local sz=${SIZE_OF["$entry"]:-0}
+        log "[models $k/$total] $subdir/$name ($( [ "$sz" -gt 0 ] && echo "$(gb $sz) GB" || echo "size ?"))   — $(gb $DONE_BYTES)/$(gb $PLAN_BYTES) GB done"
+        status "[$STEP_N/$STEP_TOTAL] Models $k/$total: $name — $(gb $DONE_BYTES)/$(gb $PLAN_BYTES) GB done"
         local ok=1
         if [[ "$url" =~ ^https://huggingface\.co/ ]]; then
             download_hf "$url" "$dest" || ok=0
@@ -204,7 +265,11 @@ download_models() {
             rm -f "$dest"; ok=0
         fi
 
-        [ $ok -eq 1 ] || FAILED+=("model: $subdir/$name")
+        if [ $ok -eq 1 ]; then
+            DONE_BYTES=$((DONE_BYTES + $(stat -c%s "$dest" 2>/dev/null || echo "$sz")))
+        else
+            FAILED+=("model: $subdir/$name")
+        fi
     done
     # Keep temp dir if anything failed, so a re-run can resume partial files
     [ ${#FAILED[@]} -eq 0 ] && rm -rf "$M/.tmp_hf" 2>/dev/null
@@ -214,7 +279,8 @@ download_models() {
 # Civitai: filename unknown until download, so a marker file tracks completion
 # (keyed by URL) and re-runs skip finished items.
 download_civitai() {
-    local wf_dir="$COMFY/user/default/workflows"
+    local wf_dir="$COMFY/user/default/workflows" total=0 k=0 e
+    for e in "${CIVITAI[@]}"; do [ -n "${SIZE_OF["$e"]+x}" ] && total=$((total+1)); done
     for entry in "${CIVITAI[@]}"; do
         IFS='|' read -r target url fname <<< "$entry"   # fname optional: save under this name
         local dest
@@ -229,7 +295,9 @@ download_civitai() {
             continue
         fi
  
-        log "Downloading (Civitai): $target"
+        k=$((k+1)); local sz=${SIZE_OF["$entry"]:-0}
+        log "[civitai $k/$total] $target/${fname:-(server name)} ($( [ "$sz" -gt 0 ] && echo "$(gb $sz) GB" || echo "size ?"))   — $(gb $DONE_BYTES)/$(gb $PLAN_BYTES) GB done"
+        status "[$STEP_N/$STEP_TOTAL] Civitai $k/$total: ${fname:-$target} — $(gb $DONE_BYTES)/$(gb $PLAN_BYTES) GB done"
         if [ -z "${CIVITAI_TOKEN:-}" ]; then
             echo "ERROR: CIVITAI_TOKEN not set."
             FAILED+=("civitai: $target ($url) — no token"); continue
@@ -264,6 +332,7 @@ download_civitai() {
             echo "Saved $dest/$name"
         fi
         echo "$name" > "$marker"
+        DONE_BYTES=$((DONE_BYTES + sz))
         rm -rf "$tmp"
     done
     rm -rf "$WORKSPACE/.tmp_civitai" 2>/dev/null
@@ -282,15 +351,19 @@ check_civitai_token() {
 }
 
 summary() {
-    log "Provisioning finished"
+    step_done
+    local took; took=$(fmt_dur $(( $(date +%s) - PROV_T0 )))
+    log "Provisioning finished in $took — downloaded $(gb $DONE_BYTES) GB"
     du -sh "$M"/*/ 2>/dev/null
 
     if [ ${#FAILED[@]} -gt 0 ]; then
         echo -e "\n!!! ${#FAILED[@]} item(s) FAILED:"
         printf '  - %s\n' "${FAILED[@]}"
         echo "Re-run this script from the terminal to retry; completed files are skipped."
+        status "FINISHED in $took with ${#FAILED[@]} failure(s) — see the end of the provisioning log"
     else
         echo -e "\nAll items OK."
+        status "FINISHED in $took — all items OK ($(gb $DONE_BYTES) GB downloaded)"
     fi
 }
 check_hf_token() {
@@ -355,7 +428,7 @@ fetch_stacks() {
         return 1
     fi
 
-    local wanted=() s
+    local wanted=() s fam
     if [ "${STACKS,,}" = "all" ]; then
         mapfile -t wanted <<< "$available"
     else
@@ -367,6 +440,10 @@ fetch_stacks() {
             match=$(grep -ixF -- "$s" <<< "$available" | head -1)   # case-insensitive, real folder name kept
             if [ -n "$match" ]; then
                 wanted+=("$match")
+            elif grep -qiE -- "^${s}-" <<< "$available"; then
+                # a family name (qwen21, mmh3) selects every stack in that family
+                mapfile -t fam <<< "$(grep -iE -- "^${s}-" <<< "$available")"
+                wanted+=("${fam[@]}")
             else
                 echo "ERROR: unknown stack '$s'"
                 FAILED+=("stack: unknown '$s'")
@@ -379,7 +456,7 @@ fetch_stacks() {
         echo "No valid stacks selected. Available: $(echo $available)"
         return 1
     fi
-    if ! git -C "$REPO_DIR" sparse-checkout set "${wanted[@]/#/stacks/}"; then
+    if ! git -C "$REPO_DIR" sparse-checkout set families "${wanted[@]/#/stacks/}"; then
         FAILED+=("stacks: sparse checkout failed")
         return 1
     fi
@@ -397,6 +474,20 @@ load_stacks() {
             echo "Loaded stack: $s"
         else
             echo "Stack '$s' has no stack.sh (workflows only)."
+        fi
+    done
+    # Family LoRAs: a stack named <family>-<name> (e.g. qwen21-outpaint, mmh3-dasiwa) pulls in
+    # families/<family>/loras.sh once, however many stacks of that family are selected.
+    local fam
+    local -A famseen=()
+    for s in "${SELECTED[@]}"; do
+        fam="${s%%-*}"
+        [ -n "${famseen[$fam]+1}" ] && continue
+        famseen[$fam]=1
+        f="$REPO_DIR/families/$fam/loras.sh"
+        if [ -f "$f" ]; then
+            source "$f"
+            echo "Loaded family LoRAs: $fam"
         fi
     done
     dedupe APT_PACKAGES; dedupe PIP_PACKAGES; dedupe NODES; dedupe MODELS; dedupe CIVITAI; dedupe LINKS
@@ -423,22 +514,60 @@ create_links() {
 
 # Copy stacks/<name>/*.json to ComfyUI workflows/<name>/ (overwrites same-named files there).
 install_stack_workflows() {
-    local wf="$COMFY/user/default/workflows" s files
+    local wf="$COMFY/user/default/workflows" s files orig
     shopt -s nullglob
     for s in "${SELECTED[@]}"; do
         files=("$REPO_DIR/stacks/$s"/*.json)
-        if [ ${#files[@]} -eq 0 ]; then
+        orig=("$REPO_DIR/stacks/$s"/originals/*.json)   # author's files as shipped, kept for comparison
+        if [ ${#files[@]} -eq 0 ] && [ ${#orig[@]} -eq 0 ]; then
             echo "$s: no workflow JSONs"
             continue
         fi
         mkdir -p "$wf/$s"
-        if cp -f "${files[@]}" "$wf/$s/"; then
-            echo "$s: installed ${#files[@]} workflow(s) -> $wf/$s"
-        else
-            FAILED+=("workflows: $s")
+        if [ ${#files[@]} -gt 0 ]; then
+            if cp -f "${files[@]}" "$wf/$s/"; then
+                echo "$s: installed ${#files[@]} workflow(s) -> $wf/$s"
+            else
+                FAILED+=("workflows: $s")
+            fi
+        fi
+        if [ ${#orig[@]} -gt 0 ]; then
+            mkdir -p "$wf/$s/originals"
+            if cp -f "${orig[@]}" "$wf/$s/originals/"; then
+                echo "$s: installed ${#orig[@]} original workflow(s) -> $wf/$s/originals"
+            else
+                FAILED+=("workflows (originals): $s")
+            fi
         fi
     done
     shopt -u nullglob
+}
+
+### ============================================================
+### FUNCTIONS — quiet log
+### ============================================================
+
+# Vast's comfyui / api-wrapper services print "startup paused until provisioning has completed" every 5 s
+# while /.provisioning exists. Stop them for the duration and start exactly those we stopped afterwards.
+QUIET_STOPPED=()
+quiet_on() {
+    [ "${QUIET_LOG:-true}" = "false" ] && return 0
+    command -v supervisorctl >/dev/null 2>&1 || return 0
+    local svc
+    for svc in comfyui api-wrapper; do
+        if supervisorctl status "$svc" 2>/dev/null | grep -q RUNNING; then
+            supervisorctl stop "$svc" >/dev/null 2>&1 && QUIET_STOPPED+=("$svc")
+        fi
+    done
+    [ ${#QUIET_STOPPED[@]} -gt 0 ] && echo "QUIET_LOG: paused ${QUIET_STOPPED[*]} (restarted when provisioning ends)"
+    return 0
+}
+quiet_off() {
+    local svc
+    for svc in "${QUIET_STOPPED[@]}"; do
+        supervisorctl start "$svc" >/dev/null 2>&1 || echo "WARNING: could not restart $svc — run: supervisorctl start $svc"
+    done
+    QUIET_STOPPED=()
 }
 
 ### ============================================================
@@ -446,19 +575,20 @@ install_stack_workflows() {
 ### ============================================================
 
 provisioning_start() {
-    check_disk
-    log "Stacks"; fetch_stacks && load_stacks
-    check_hf_token
-    check_civitai_token
-    log "APT packages";  install_apt
-    log "ComfyUI update"; update_comfyui
-    log "PIP packages";  install_pip
-    install_nodes
-    download_models
-    download_civitai
-    create_links
-    log "Workflows"; install_stack_workflows
+    quiet_on
+    trap quiet_off EXIT          # restart the services even if the script dies
+    trap 'exit 143' INT TERM
+    step "Stacks";                         fetch_stacks && load_stacks
+    step "Checks (disk, tokens)";          check_disk; check_hf_token; check_civitai_token
+    step "System packages (apt)";          install_apt
+    step "ComfyUI update";                 update_comfyui
+    step "Python packages (${#PIP_PACKAGES[@]})"; install_pip
+    step "Custom nodes (${#NODES[@]})";    install_nodes
+    step "Models";                         plan_downloads; download_models
+    step "Civitai files (${#CIVITAI[@]})"; download_civitai
+    step "Links + workflows";              create_links; install_stack_workflows
     rm -rf "$REPO_DIR"
+    quiet_off
     summary
 }
 

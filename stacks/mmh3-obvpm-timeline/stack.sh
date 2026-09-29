@@ -3,6 +3,7 @@
 # Generate / extend / prepend / bridge / edit videos on a timeline, with a one-pass latent upscale.
 # Needs ComfyUI 0.35.0+ (core "Model Sparse Attention" node).
 # Base nodes (rgthree, KJNodes, GGUF) come from provision.sh.
+# Turbo LoRAs live in families/mmh3/loras.sh (loaded with every mmh3-* stack).
 # MiniMax H3 base files below are the same as mmh3-dasiwa; downloaded once when both are selected.
 
 NODES+=(
@@ -13,7 +14,7 @@ NODES+=(
   "https://github.com/xmarre/ComfyUI-Spectrum-MiniMax-H3"           # Spectrum acceleration
 )
 
-# Workflow: h3_obvpm_timeline_r2v_v0.1.1-006.json from chanon/comfyui-obvpm-timeline (GPL-3.0, upstream 4a027a0);
+# Workflow: mmh3-obvpm-timeline_r2v_v0.1.1.json from chanon/comfyui-obvpm-timeline (GPL-3.0, upstream 4a027a0);
 #   h3\ LoRA prefixes removed, latent upscaler pointed at the conv_v1_bf16 file below (author uses fp16).
 
 # Format: "subdir|url"  (filename is taken from the URL)
@@ -26,12 +27,6 @@ MODELS+=(
   "vae_approx|https://huggingface.co/Kijai/MiniMax-H3-TAE/resolve/main/vae_approx/taeh3.safetensors"
   # Latent upscaler (official, bf16). The saved workflow points at this file.
   "latent_upscale_models|https://huggingface.co/LBH-123-AI/Minimax_h3_latent_Upscaler/resolve/main/minimax_h3_latent_upscaler_3d_conv_v1/minimax_h3_latent_upscaler_3d_conv_v1_bf16.safetensors"
-  # Turbo LoRAs (loras/ root; workflow paths fixed to match)
-  "loras|https://huggingface.co/lightx2v/Minimax-h3-Turbo/resolve/main/minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors"
-  "loras|https://huggingface.co/lightx2v/Minimax-h3-Turbo/resolve/main/minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors"  # "vanilla" presets
-  "loras|https://huggingface.co/Kijai/MiniMax-H3_comfy/resolve/098f8c48fccead9a93191c166ca31a130659d3bd/loras/minimax_h3_ref2v_lightx2v_turbo_4step_v0.1_resized_avg_rank_20_bf16.safetensors"  # "lightx2v" preset (pinned commit)
-  "loras|https://huggingface.co/Robert1212star/TaoMate-H3-3Step-ComfyUI/resolve/main/taomate_h3_3step_comfy.safetensors"  # "taomate 3 step refine" preset
-  "loras|https://huggingface.co/Momoking/MiniMax-H3-Turbo-Lora-ComfyUI/resolve/main/minimax_h3_turbo_v4_step600_ema_pruned_comfyui.safetensors"
 )
 
 # Text encoder by GPU, same choice and files as mmh3-dasiwa (TEXT_ENCODER env var).
