@@ -115,6 +115,10 @@ plan_downloads() {
         SIZE_OF["$entry"]=$sz; PLAN_BYTES=$((PLAN_BYTES+sz)); n=$((n+1)); [ "$sz" -eq 0 ] && unknown=$((unknown+1))
     done
     echo "Download plan: $n file(s), $(gb $PLAN_BYTES) GB$([ $unknown -gt 0 ] && echo " (+$unknown of unknown size)"); $have already present."
+    local free_gb; free_gb=$(df -BG --output=avail "$WORKSPACE" | tail -1 | tr -dc '0-9')
+    if [ "${free_gb:-0}" -gt 0 ] && [ $((PLAN_BYTES/1000000000)) -ge "$free_gb" ]; then
+        echo "WARNING: plan ($(gb $PLAN_BYTES) GB) does not fit in ${free_gb} GB free. Downloads will fail; pick fewer stacks or a bigger disk."
+    fi
 }
 
 check_disk() {
@@ -122,7 +126,7 @@ check_disk() {
     free_gb=$(df -BG --output=avail "$WORKSPACE" | tail -1 | tr -dc '0-9')
     echo "Free disk on $WORKSPACE: ${free_gb} GB"
     if [ "${free_gb:-0}" -lt 100 ]; then
-        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, mmh3-obvpm-timeline ~50 GB, each qwen21 stack ~35-45 GB (32 GB shared), all ~150 GB (estimate). Downloads may fail."
+        echo "WARNING: <100 GB free. A single stack is 15-90 GB, all of them well over 150 GB; the exact need is shown in the download plan below."
     fi
 }
 

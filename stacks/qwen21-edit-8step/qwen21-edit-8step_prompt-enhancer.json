@@ -345,8 +345,8 @@
         "res_multistep",
         "simple",
         1020747466163731,
-        "qwen_image_2.1_bf16.safetensors",
-        "qwen3vl_8b_nvfp4_heretic.safetensors",
+        "qwen_image_2.1.safetensors",
+        "qwen3vl_8b_heretic.safetensors",
         "qwen_image_2.1_vae_bf16.safetensors"
       ],
       "widgets_values_named": {
@@ -361,8 +361,8 @@
         "scheduler": "res_multistep",
         "scheduler_1": "simple",
         "seed": 1020747466163731,
-        "unet_name": "qwen_image_2.1_bf16.safetensors",
-        "clip_name": "qwen3vl_8b_nvfp4_heretic.safetensors",
+        "unet_name": "qwen_image_2.1.safetensors",
+        "clip_name": "qwen3vl_8b_heretic.safetensors",
         "vae_name": "qwen_image_2.1_vae_bf16.safetensors"
       }
     },
