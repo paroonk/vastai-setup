@@ -36,7 +36,8 @@ MODELS+=(
   "upscale_models|https://huggingface.co/Kim2091/UltraSharp/resolve/main/4x-UltraSharp.safetensors"
   "upscale_models|https://github.com/xinntao/Real-ESRGAN/releases/download/v0.1.0/RealESRGAN_x4plus.pth"
   # LLM models
-  # (QwenVL-Mod GGUF nodes read models/llm/GGUF; mmproj must sit next to the model)
+  # Used by the DaSiWa Director node's optional Prompt Forge (llama-cpp above): it scans models/llm/
+  # recursively, and the mmproj beside the GGUF lets Forge see reference pictures.
   "llm/GGUF|https://huggingface.co/DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF/resolve/main/Qwen3.5-9B-The-Defiant-Fable-Uncnr-Heretic-NEO-MAX-Q8_0.gguf"
   # Vision projector (F16): enables image input / captioning. Drop it for text-only.
   "llm/GGUF|https://huggingface.co/DavidAU/Qwen3.5-9B-The-Defiant-Fable-Uncensored-Heretic-NEO-IMATRIX-MAX-MTP-GGUF/resolve/main/mmproj-F16.gguf"

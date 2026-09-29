@@ -57,6 +57,9 @@ MODELS+=(
 CIVITAI+=(
   # NSFW LORA | Qwen Image 2.1 v2.0 (server name: "NSFW Qwen by TheseAlpacas V2") — Power Lora Loader, on
   "loras|https://civitai.red/api/download/models/3357315?fileId=3244894|qwen21_nsfw-lora_v2.0.safetensors"
+  # NSFW LORA v1.0 (server name: "NSFW Qwen Lora") — the version the workflow author used; not in the
+  #   workflow (slot uses v2.0). Pick it in the Power Lora Loader to compare.
+  "loras|https://civitai.red/api/download/models/3351951?fileId=3239181|qwen21_nsfw-lora_v1.0.safetensors"
   # qwen 2.1 vagina v1.0 (server name: qwen21_v2_000002750) — Power Lora Loader, on
   "loras|https://civitai.red/api/download/models/3354330?fileId=3241739|qwen21_vagina_v1.0.safetensors"
   # Pornmaster Qwen Image 2.1 Breasts Slider V1 — not in the workflow; add it to the Power Lora Loader to use
