@@ -72,7 +72,7 @@ when the author releases a new version, re-download and re-apply the path fixes.
 |---|---|---|
 | `stacks/mmh3-dasiwa/DasiwaMinimaxH3WorkflowsT2VA_cMMH3V25.json` | DaSiWa C-MMH3 v2.5 (Civitai 3195699) | `MiniMaxH3/` prefixes removed; checkpoint -> Civitai filename; latent upscaler -> conv_v1_bf16 |
 | `stacks/qwen21-art/NSFWWorkflowForYour_qwen21V25.json` | "(N)SFW workflow for your ART" Qwen 2.1 V2.5 (Civitai 2730327) | `Qwen 2.1\` LoRA prefixes removed; Civitai LoRAs -> readable names; diffusion model + text encoder -> bf16 (author used int8) |
-| `stacks/mmh3-obvpm-timeline/h3_obvpm_timeline_r2v_v0.1.1-005.json` | [chanon/comfyui-obvpm-timeline](https://github.com/chanon/comfyui-obvpm-timeline) (GPL-3.0) | `h3\` LoRA prefixes removed (nodes + presets); latent upscaler -> conv_v1_bf16 |
+| `stacks/mmh3-obvpm-timeline/h3_obvpm_timeline_r2v_v0.1.1-006.json` | [chanon/comfyui-obvpm-timeline](https://github.com/chanon/comfyui-obvpm-timeline) (GPL-3.0) | `h3\` LoRA prefixes removed (nodes + presets); latent upscaler conv_v1_fp16 -> conv_v1_bf16 |
 
 Civitai entries may give a 3rd field, `"target|url|filename"`, to save under a readable name.
 

@@ -13,7 +13,8 @@ NODES+=(
   "https://github.com/xmarre/ComfyUI-Spectrum-MiniMax-H3"           # Spectrum acceleration
 )
 
-# Workflow saved in this folder from chanon/comfyui-obvpm-timeline (GPL-3.0), upscaler filename fixed.
+# Workflow: h3_obvpm_timeline_r2v_v0.1.1-006.json from chanon/comfyui-obvpm-timeline (GPL-3.0, upstream 4a027a0);
+#   h3\ LoRA prefixes removed, latent upscaler pointed at the conv_v1_bf16 file below (author uses fp16).
 
 # Format: "subdir|url"  (filename is taken from the URL)
 MODELS+=(
