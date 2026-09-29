@@ -54,6 +54,7 @@ NODES=(
 )
 MODELS=()     # "subdir|url"
 CIVITAI=()    # "target|url"
+LINKS=()      # "link|target", both relative to models/: expose one downloaded file at a second path
 
 ### ============================================================
 ### FUNCTIONS — download engine (unchanged from the original gist)
@@ -66,7 +67,7 @@ check_disk() {
     free_gb=$(df -BG --output=avail "$WORKSPACE" | tail -1 | tr -dc '0-9')
     echo "Free disk on $WORKSPACE: ${free_gb} GB"
     if [ "${free_gb:-0}" -lt 100 ]; then
-        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, qwen21-art ~52 GB, qwen21-inpainting ~45 GB, mmh3-obvpm-timeline ~50 GB, all ~147 GB. Downloads may fail."
+        echo "WARNING: <100 GB free. mmh3-dasiwa ~75 GB, qwen21-art ~52 GB, qwen21-inpainting ~45 GB, mmh3-obvpm-timeline ~50 GB, all ~135 GB. Downloads may fail."
     fi
 }
 
@@ -398,8 +399,26 @@ load_stacks() {
             echo "Stack '$s' has no stack.sh (workflows only)."
         fi
     done
-    dedupe APT_PACKAGES; dedupe PIP_PACKAGES; dedupe NODES; dedupe MODELS; dedupe CIVITAI
+    dedupe APT_PACKAGES; dedupe PIP_PACKAGES; dedupe NODES; dedupe MODELS; dedupe CIVITAI; dedupe LINKS
     echo "To install: ${#NODES[@]} nodes, ${#MODELS[@]} models, ${#CIVITAI[@]} Civitai files"
+}
+
+# Symlink downloaded files to extra paths some nodes expect (no second download).
+create_links() {
+    local entry link target src dst
+    for entry in "${LINKS[@]}"; do
+        IFS='|' read -r link target <<< "$entry"
+        src="$M/$target"; dst="$M/$link"
+        if [ ! -e "$src" ]; then
+            FAILED+=("link: $link (target missing: $target)"); continue
+        fi
+        mkdir -p "$(dirname "$dst")"
+        if ln -sfn "$(realpath "$src")" "$dst"; then
+            echo "Linked $link -> $target"
+        else
+            FAILED+=("link: $link")
+        fi
+    done
 }
 
 # Copy stacks/<name>/*.json to ComfyUI workflows/<name>/ (overwrites same-named files there).
@@ -437,6 +456,7 @@ provisioning_start() {
     install_nodes
     download_models
     download_civitai
+    create_links
     log "Workflows"; install_stack_workflows
     rm -rf "$REPO_DIR"
     summary

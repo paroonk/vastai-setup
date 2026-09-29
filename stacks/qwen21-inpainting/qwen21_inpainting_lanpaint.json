@@ -1401,7 +1401,7 @@
       },
       "widgets_values": [
         "remove the man in blue cloth and the guitar from picture 1",
-        "gemma4_12b_int8_convrot.safetensors",
+        "qwen3vl_8b_bf16.safetensors",
         512,
         0.7,
         64,
@@ -1410,7 +1410,7 @@
       ],
       "widgets_values_named": {
         "prompt": "remove the man in blue cloth and the guitar from picture 1",
-        "clip_name": "gemma4_12b_int8_convrot.safetensors",
+        "clip_name": "qwen3vl_8b_bf16.safetensors",
         "max_length": 512,
         "sampling_mode.temperature": 0.7,
         "sampling_mode.top_k": 64,
@@ -2244,12 +2244,12 @@
               "Node name for S&R": "CLIPLoader"
             },
             "widgets_values": [
-              "gemma4_12b_int8_convrot.safetensors",
+              "qwen3vl_8b_bf16.safetensors",
               "stable_diffusion",
               "default"
             ],
             "widgets_values_named": {
-              "clip_name": "gemma4_12b_int8_convrot.safetensors",
+              "clip_name": "qwen3vl_8b_bf16.safetensors",
               "type": "stable_diffusion",
               "device": "default"
             }
