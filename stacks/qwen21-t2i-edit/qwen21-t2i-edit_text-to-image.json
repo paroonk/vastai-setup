@@ -130,11 +130,11 @@
         }
       },
       "widgets_values": [
-        "qwen_image_2.1_nvfp4.safetensors",
+        "qwen_image_2.1.safetensors",
         "default"
       ],
       "widgets_values_named": {
-        "unet_name": "qwen_image_2.1_nvfp4.safetensors",
+        "unet_name": "qwen_image_2.1.safetensors",
         "weight_dtype": "default"
       },
       "color": "#100a73",
@@ -205,12 +205,12 @@
         }
       },
       "widgets_values": [
-        "qwen3vl_8b_nvfp4_heretic.safetensors",
+        "qwen3vl_8b_heretic.safetensors",
         "qwen_image",
         "default"
       ],
       "widgets_values_named": {
-        "clip_name": "qwen3vl_8b_nvfp4_heretic.safetensors",
+        "clip_name": "qwen3vl_8b_heretic.safetensors",
         "type": "qwen_image",
         "device": "default"
       },

@@ -1,4 +1,4 @@
-# Family: mmh3 — LoRAs loaded whenever ANY stack named mmh3-* is selected.
+# Family: mmh3 — shared by every mmh3-* stack (MiniMax H3 LoRAs).
 # Sourced by provision.sh (after the stacks). Only append (+=).
 # Add a MiniMax H3 LoRA here once and every mmh3 stack gets it. All go to loras/ (no subfolders).
 

@@ -58,6 +58,7 @@ NODES=(
 MODELS=()     # "subdir|url"
 CIVITAI=()    # "target|url"
 LINKS=()      # "link|target", both relative to models/: expose one downloaded file at a second path
+WF_SUBST=()   # "from|to": text replaced in installed workflow JSONs (e.g. a model filename swapped for the file actually downloaded)
 
 ### ============================================================
 ### FUNCTIONS — download engine (unchanged from the original gist)
@@ -483,15 +484,15 @@ load_stacks() {
             echo "Stack '$s' has no stack.sh (workflows only)."
         fi
     done
-    # Family LoRAs: a stack named <family>-<name> (e.g. qwen21-outpaint, mmh3-dasiwa) pulls in
-    # families/<family>/loras.sh once, however many stacks of that family are selected.
+    # Family files (shared LoRAs/models): a stack named <family>-<name> (e.g. qwen21-outpaint, mmh3-dasiwa) pulls in
+    # families/<family>/family.sh once, however many stacks of that family are selected.
     local fam
     local -A famseen=()
     for s in "${SELECTED[@]}"; do
         fam="${s%%-*}"
         [ -n "${famseen[$fam]+1}" ] && continue
         famseen[$fam]=1
-        f="$REPO_DIR/families/$fam/loras.sh"
+        f="$REPO_DIR/families/$fam/family.sh"
         if [ -f "$f" ]; then
             source "$f"
             echo "Loaded family LoRAs: $fam"
@@ -520,6 +521,17 @@ create_links() {
 }
 
 # Copy stacks/<name>/*.json to ComfyUI workflows/<name>/ (overwrites same-named files there).
+# Apply WF_SUBST ("from|to" literal replacements, in order) to one installed workflow file.
+apply_wf_subst() {
+    local f="$1" e from to
+    [ ${#WF_SUBST[@]} -eq 0 ] && return 0
+    for e in "${WF_SUBST[@]}"; do
+        from=$(printf '%s' "${e%%|*}" | sed 's/[][\.*^$|]/\\&/g')
+        to=$(printf '%s' "${e#*|}" | sed 's/[&|\\]/\\&/g')
+        sed -i "s|$from|$to|g" "$f" || FAILED+=("workflow edit: $f")
+    done
+}
+
 install_stack_workflows() {
     local wf="$COMFY/user/default/workflows" s files orig
     shopt -s nullglob
@@ -533,6 +545,8 @@ install_stack_workflows() {
         mkdir -p "$wf/$s"
         if [ ${#files[@]} -gt 0 ]; then
             if cp -f "${files[@]}" "$wf/$s/"; then
+                local f
+                for f in "${files[@]}"; do apply_wf_subst "$wf/$s/$(basename "$f")"; done
                 echo "$s: installed ${#files[@]} workflow(s) -> $wf/$s"
             else
                 FAILED+=("workflows: $s")

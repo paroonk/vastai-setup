@@ -3,7 +3,7 @@
 # Generate / extend / prepend / bridge / edit videos on a timeline, with a one-pass latent upscale.
 # Needs ComfyUI 0.35.0+ (core "Model Sparse Attention" node).
 # Base nodes (rgthree, KJNodes, GGUF) come from provision.sh.
-# Turbo LoRAs live in families/mmh3/loras.sh (loaded with every mmh3-* stack).
+# Turbo LoRAs live in families/mmh3/family.sh (loaded with every mmh3-* stack).
 # MiniMax H3 base files below are the same as mmh3-dasiwa; downloaded once when both are selected.
 
 NODES+=(

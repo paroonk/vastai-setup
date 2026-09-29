@@ -2,7 +2,7 @@
 # Sourced by provision.sh. Only add to the lists here; the download engine lives in provision.sh.
 # Workflow: qwen21-lonecats-fast_upscale-postprocess.json -> ComfyUI workflows/qwen21-lonecats-fast/ (model paths flattened: the author's
 #   "Qwen\..." subfolder prefixes removed). Turbo LoRA is bypassed by default (switch on).
-# LoRAs come from families/qwen21/loras.sh. Nodes: base (rgthree, KJNodes Get/SetNode, GGUF) + the packs below.
+# LoRAs come from families/qwen21/family.sh. Nodes: base (rgthree, KJNodes Get/SetNode, GGUF) + the packs below.
 # Not downloaded: the bypassed GGUF diffusion model (qwenImage21GGUF_v10_q80) and BiRefNet (LCRemBG, bypassed; auto-downloads).
 # First run of the VOSR2 loader auto-downloads its ~7 GB bundle (models/vosr2/VOSR2) from CSWRY/VOSR — takes ~5 min.
 
@@ -24,8 +24,8 @@ NODES+=(
 )
 
 MODELS+=(
-  # VAE, shared by every qwen21 stack. The diffusion model (NVFP4 on Blackwell, else bf16) and the heretic NVFP4 text
-  # encoder come from families/qwen21/loras.sh; every workflow's UNET / CLIP loader points at them.
+  # VAE, shared by every qwen21 stack. The diffusion model and the heretic text encoder come from families/qwen21/family.sh
+  # (NVFP4 by default), and the workflows' neutral names (qwen_image_2.1 / qwen3vl_8b_heretic) are rewritten to them at install.
   "vae|https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors"
   # LC Vision model (Qwen3-VL-4B abliterated Q4_K_M + f16 mmproj, 2.5 + 0.8 GB) — own folder so its mmproj pairs correctly
   "LLM/Qwen3-VL-4B-abliterated|https://huggingface.co/mradermacher/Qwen3-VL-4B-Instruct-c_abliterated-v2-GGUF/resolve/main/Qwen3-VL-4B-Instruct-c_abliterated-v2.Q4_K_M.gguf"
