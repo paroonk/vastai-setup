@@ -399,6 +399,13 @@ dedupe() {
     _arr=("${_out[@]}")
 }
 
+# True on Blackwell (compute capability >= 10), where NVFP4 has native kernels.
+gpu_is_blackwell() {
+    local cc
+    cc=$(nvidia-smi --query-gpu=compute_cap --format=csv,noheader 2>/dev/null | head -1)
+    [ -n "$cc" ] && [ "${cc%%.*}" -ge 10 ]
+}
+
 # For stacks with GPU-dependent files. Prints "nvfp4" or "int8" (logs go to stderr).
 gpu_text_encoder() {
     local choice="${TEXT_ENCODER:-auto}"

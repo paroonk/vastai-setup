@@ -24,9 +24,8 @@ NODES+=(
 )
 
 MODELS+=(
-  # Diffusion model (14.2 GB) and VAE — bf16, shared by every qwen21 stack. The text encoder is the heretic bf16
-  # (families/qwen21/loras.sh), which every workflow's CLIP loader points at.
-  "diffusion_models|https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_bf16.safetensors"
+  # VAE, shared by every qwen21 stack. The diffusion model (NVFP4 on Blackwell, else bf16) and the heretic NVFP4 text
+  # encoder come from families/qwen21/loras.sh; every workflow's UNET / CLIP loader points at them.
   "vae|https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/vae/qwen_image_2.1_vae_bf16.safetensors"
   # LC Vision model (Qwen3-VL-4B abliterated Q4_K_M + f16 mmproj, 2.5 + 0.8 GB) — own folder so its mmproj pairs correctly
   "LLM/Qwen3-VL-4B-abliterated|https://huggingface.co/mradermacher/Qwen3-VL-4B-Instruct-c_abliterated-v2-GGUF/resolve/main/Qwen3-VL-4B-Instruct-c_abliterated-v2.Q4_K_M.gguf"

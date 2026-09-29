@@ -412,12 +412,12 @@
         }
       },
       "widgets_values": [
-        "qwen3vl_8b_bf16_heretic.safetensors",
+        "qwen3vl_8b_nvfp4_heretic.safetensors",
         "qwen_image",
         "default"
       ],
       "widgets_values_named": {
-        "clip_name": "qwen3vl_8b_bf16_heretic.safetensors",
+        "clip_name": "qwen3vl_8b_nvfp4_heretic.safetensors",
         "type": "qwen_image",
         "device": "default"
       }

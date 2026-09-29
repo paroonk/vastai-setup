@@ -21,17 +21,19 @@ Repo holds only `.sh` and workflow `.json`. Models stay on Hugging Face / Civita
 
 ## Stacks
 
-| Stack | What | Approx. download |
+| Stack | What | Approx. download (qwen21: on top of the shared core, see below) |
 |---|---|---|
 | `mmh3-dasiwa` | MiniMax H3 video + DaSiWa workflows | ~75 GB |
-| `qwen21-multi-image` | Qwen Image 2.1 multi-image editing, up to 10 references, reference-aware prompt enhancer | ~42 GB (32 GB shared with other qwen21 stacks) |
-| `qwen21-integrated` | Qwen Image 2.1 integrated image editing (SageAttention / EasyCache speed-ups, prompt enhancer bypassed) | ~42 GB (32 GB shared with other qwen21 stacks) |
-| `qwen21-outpaint` | Qwen Image 2.1 outpaint on any side, auto prompt (Qwen3-VL), AusBoss nodes, outpaint LoRA v2/v1 | ~33 GB (32 GB shared with other qwen21 stacks) |
-| `qwen21-lonecats-fast` | Lonecats Qwen 2.1 fast workflow: turbo LoRA option, Clown/Detail-Daemon sampling, VOSR2 4x upscaler, post-processing (LUT, phone filters), Qwen3-VL caption | ~36 GB (32 GB shared with other qwen21 stacks) + ~7 GB VOSR2 on first run |
-| `qwen21-edit-8step` | Qwen 2.1 edit, 8-step turbo LoRA + prompt enhancer | ~34 GB (all shared) |
-| `qwen21-dual-cfg` | Qwen-Image-2.1 dual-CFG edit (two sampling stages, hand/foot repair) | ~34 GB (all shared) |
-| `qwen21-t2i-edit` | StefanFalkok's T2I + Edit workflows (SageAttention), prompt enhancers, SeedVR2 upscale | ~58 GB (32 GB shared) |
+| `qwen21-multi-image` | Qwen Image 2.1 multi-image editing, up to 10 references, reference-aware prompt enhancer | ~10 GB (prompt enhancer) |
+| `qwen21-integrated` | Qwen Image 2.1 integrated image editing (SageAttention / EasyCache speed-ups, prompt enhancer bypassed) | ~10 GB (prompt enhancer) |
+| `qwen21-outpaint` | Qwen Image 2.1 outpaint on any side, auto prompt (Qwen3-VL), AusBoss nodes, outpaint LoRA v2/v1 | ~0 GB |
+| `qwen21-lonecats-fast` | Lonecats Qwen 2.1 fast workflow: turbo LoRA option, Clown/Detail-Daemon sampling, VOSR2 4x upscaler, post-processing (LUT, phone filters), Qwen3-VL caption | ~3 GB (+~7 GB VOSR2 on first run) |
+| `qwen21-edit-8step` | Qwen 2.1 edit, 8-step turbo LoRA + prompt enhancer | ~0 GB |
+| `qwen21-dual-cfg` | Qwen-Image-2.1 dual-CFG edit (two sampling stages, hand/foot repair) | ~0 GB |
+| `qwen21-t2i-edit` | StefanFalkok's T2I + Edit workflows (SageAttention), prompt enhancers, SeedVR2 upscale | ~26 GB (SeedVR2 models) |
 | `mmh3-obvpm-timeline` | MiniMax H3 timeline: generate / extend / bridge / upscale (needs ComfyUI 0.35.0+) | ~50 GB (+7.3 GB if mmh3-dasiwa also selected) |
+
+**qwen21 shared core** (downloaded once for any `qwen21-*` stack): VAE, diffusion model, heretic NVFP4 text encoder and all qwen21 LoRAs. About 13 GB on Blackwell (NVFP4 diffusion model 3.9 GB) or about 24 GB on other GPUs (bf16 diffusion model 14.2 GB).
 
 **LoRA families.** Select any `qwen21-*` stack and you get **all** qwen21 LoRAs (~2.3 GB from Hugging Face
 + the Civitai ones); any `mmh3-*` stack gets all MiniMax H3 LoRAs. They live in `families/<family>/loras.sh`;
@@ -55,7 +57,9 @@ Template env vars:
 | `STACKS` | `all` | `mmh3-dasiwa`, `mmh3-dasiwa,qwen21-outpaint`, a family name (`qwen21` = every `qwen21-*` stack, `mmh3` likewise), or `all` (case-insensitive). Selects nodes, models and workflows together. |
 | `CIVITAI_TOKEN` | — | Civitai API key. Required for Civitai downloads. |
 | `HF_TOKEN` | — | Only for gated Hugging Face repos. |
-| `TEXT_ENCODER` | `auto` | `nvfp4` (Blackwell) / `int8` / `auto` |
+| `TEXT_ENCODER` | `auto` | MiniMax H3 stacks only: `auto` = nvfp4 on Blackwell, int8 elsewhere; or force `nvfp4` / `int8` |
+| `QWEN21_DIFFUSION` | `auto` | qwen21 stacks: `auto` = NVFP4 on Blackwell, bf16 elsewhere; or force `nvfp4` / `bf16` |
+| `QWEN21_ENCODER` | `nvfp4` | qwen21 stacks: heretic `nvfp4` (6.3 GB) or `bf16` (17.5 GB) |
 | `QUIET_LOG` | `true` | Pauses Vast's `comfyui`/`api-wrapper` services during provisioning (they print "startup paused…" every 5 s) and restarts them at the end. `false` leaves them. If ComfyUI is ever down after a run: `supervisorctl start comfyui api-wrapper`. |
 | `AUTO_UPDATE` | `true` | `git pull` custom nodes already on disk (e.g. a restarted instance). `false` keeps them. Fresh clones are always latest. |
 | `SETUP_REF` | `main` | Branch/tag to take stacks from — test changes on a branch first |
@@ -98,9 +102,9 @@ when the author releases a new version, re-download and re-apply the path fixes.
 | File | Source | Changes |
 |---|---|---|
 | `stacks/mmh3-dasiwa/mmh3-dasiwa_t2va_v2.5.json` | DaSiWa C-MMH3 v2.5 (Civitai 3195699) | `MiniMaxH3/` prefixes removed; checkpoint -> Civitai filename; latent upscaler -> conv_v1_bf16; default upscale model `2x-AnimeSharpV4_RCAN` (not downloaded, stage OFF) -> `4x-UltraSharp` |
-| `stacks/qwen21-multi-image/qwen21-multi-image_edit.json` | "Qwen Image 2.1 Multi-image Editing" (Civitai 2958067, v1.0) | diffusion model -> bf16, text encoder -> heretic bf16 (author int8); prompt-enhancer encoder (Qwen3.5-9B PE, int8 only) kept |
-| `stacks/qwen21-integrated/qwen21-integrated_edit.json` | "Qwen image 2.1 Integrated Image Editing to Accelerate Workflows" (Civitai 2965021, v1.0) | diffusion model -> bf16, text encoder -> heretic bf16 (author int8) |
-| `stacks/qwen21-outpaint/qwen21-outpaint_auto-prompt.json` | "Qwen Image 2.1 Outpaint: auto prompt, any side, optional LoRA" (Civitai 2964810, v1.1) | diffusion model -> bf16, text encoder -> heretic bf16 (author int8). Needs ComfyUI-AusBoss nodes (installed by the stack) |
+| `stacks/qwen21-multi-image/qwen21-multi-image_edit.json` | "Qwen Image 2.1 Multi-image Editing" (Civitai 2958067, v1.0) | diffusion model -> bf16, text encoder -> heretic NVFP4 (author int8); prompt-enhancer encoder (Qwen3.5-9B PE, int8 only) kept |
+| `stacks/qwen21-integrated/qwen21-integrated_edit.json` | "Qwen image 2.1 Integrated Image Editing to Accelerate Workflows" (Civitai 2965021, v1.0) | diffusion model -> bf16, text encoder -> heretic NVFP4 (author int8) |
+| `stacks/qwen21-outpaint/qwen21-outpaint_auto-prompt.json` | "Qwen Image 2.1 Outpaint: auto prompt, any side, optional LoRA" (Civitai 2964810, v1.1) | diffusion model -> bf16, text encoder -> heretic NVFP4 (author int8). Needs ComfyUI-AusBoss nodes (installed by the stack) |
 | `stacks/qwen21-lonecats-fast/qwen21-lonecats-fast_upscale-postprocess.json` | "Lonecats Qwen 2.1 Fast Workflow w/ upscalers and post processing" (Civitai 2960068, v1.0 Beta) | `Qwen\\` model subfolder prefixes removed. Not downloaded: bypassed GGUF diffusion model. VOSR2 model auto-downloads on first run (~7 GB) |
 | `stacks/qwen21-edit-8step/qwen21-edit-8step_prompt-enhancer.json` | "qwen 2.1 EDIT WORKFLOW 8 steps with prompt enchancer" (Civitai 2969533, v1.0) | diffusion model -> bf16 (author int8); LoRA name = downloaded file. The author's `qwen3vl_8b_nvfp4_heretic` encoder is kept (see below) |
 | `stacks/qwen21-dual-cfg/qwen21-dual-cfg_edit.json` | "Qwen-Image-2.1 Dual CFG Image Edit" (Civitai 2965509, v1.0) | models -> bf16 |
@@ -112,18 +116,19 @@ second path a node expects, instead of downloading it twice.
 
 Civitai entries may give a 3rd field, `"target|url|filename"`, to save under a readable name.
 
-### qwen21-edit-8step: uncensored encoder
+### qwen21: diffusion model and text encoder
 
-The workflow uses `qwen3vl_8b_nvfp4_heretic` (Qwen3-VL-8B heretic, uncensored, NVFP4) as both the text encoder
-and the prompt enhancer. NVFP4 runs on **Blackwell GPUs only**. The stack downloads it from
-[pottokao/Qwen-Image-2.1-Text-Encoder-Heretic-NVFP4](https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic-NVFP4).
-On other GPUs (or `TEXT_ENCODER=int8`) that name links to `qwen3vl_8b_bf16_heretic` (the encoder every qwen21 stack uses).
+All `qwen21-*` workflows load `qwen_image_2.1_nvfp4` (UNET loader) and `qwen3vl_8b_nvfp4_heretic` (CLIP loader). Both come from
+`families/qwen21/loras.sh`, downloaded once:
 
-### Text encoder: heretic bf16 in every qwen21 stack
+| | Blackwell (`auto`) | Other GPUs (`auto`) | Env override |
+|---|---|---|---|
+| Diffusion model | [pottokao NVFP4 DiT](https://huggingface.co/pottokao/Qwen-Image-2.1-DiT-NVFP4-ComfyUI), 3.9 GB (community quant of the official model, non-commercial licence, T1 tier) | official bf16, 14.2 GB, the NVFP4 filename links to it | `QWEN21_DIFFUSION=auto\|nvfp4\|bf16` |
+| Text encoder | [pottokao heretic NVFP4](https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic-NVFP4), 6.3 GB (uncensored Qwen3-VL-8B) | same file (untested on non-Blackwell) | `QWEN21_ENCODER=nvfp4\|bf16` (`bf16` = heretic bf16, 17.5 GB, filename linked) |
 
-All `qwen21-*` workflows load `qwen3vl_8b_bf16_heretic` (17.5 GB, uncensored Qwen3-VL-8B, from pottokao) in their CLIP loader, and
-it is downloaded once by `families/qwen21/loras.sh`. The standard `qwen3vl_8b_bf16` is **not** downloaded. The Qwen3.5-9B prompt
-enhancers (`multi-image`, `integrated`) are a different model and stay standard.
+The NVFP4 diffusion model is a plain quantization of the official model; only the text encoder is heretic (uncensored). The
+standard (non-heretic) encoder is not downloaded. `TEXT_ENCODER` does **not** affect qwen21 stacks. The Qwen3.5-9B prompt
+enhancers (`multi-image`, `integrated`) are a different model and stay standard. Untested: LoRAs on the NVFP4 diffusion model.
 
 ### Other qwen21 LoRAs (all in `families/qwen21/loras.sh`)
 
@@ -149,7 +154,7 @@ short **Chinese** edit instructions (English barely trained). Keywords for the f
 v2 adds pubic hair: it is off by default, describe it in the prompt (阴毛). v2 also tries harder to keep accessories and
 hairstyle. Civitai showed the LoRA as paid/early access when added; the download may need access on your account.
 
-MiniMax H3 workflows reference the **nvfp4** text encoder (Blackwell). On other GPUs the stacks download
+MiniMax H3 workflows reference the **nvfp4** text encoder (native on Blackwell). On other GPUs the stacks download
 int8: pick `qwen3vl_32b_minimax_h3_int8_convrot` in the text encoder node once and save.
 
 ## Rules

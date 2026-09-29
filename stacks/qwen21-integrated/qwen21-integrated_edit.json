@@ -1575,16 +1575,16 @@
         "cnr_id": "comfy-core",
         "models": [
           {
-            "name": "qwen3vl_8b_bf16_heretic.safetensors",
+            "name": "qwen3vl_8b_nvfp4_heretic.safetensors",
             "directory": "text_encoders",
-            "url": "https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic/resolve/main/qwen3vl_8b_bf16_heretic.safetensors"
+            "url": "https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic-NVFP4/resolve/main/qwen3vl_8b_nvfp4_heretic.safetensors"
           }
         ],
         "ver": "0.36.0",
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "qwen3vl_8b_bf16_heretic.safetensors",
+        "qwen3vl_8b_nvfp4_heretic.safetensors",
         "qwen_image",
         "default"
       ]
@@ -3244,16 +3244,16 @@
         "models": [
           {
             "directory_invalid": true,
-            "name": "qwen_image_2.1_bf16.safetensors",
+            "name": "qwen_image_2.1_nvfp4.safetensors",
             "directory": "diffusion_models",
-            "url": "https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_bf16.safetensors"
+            "url": "https://huggingface.co/pottokao/Qwen-Image-2.1-DiT-NVFP4-ComfyUI/resolve/main/qwen_image_2.1_nvfp4.safetensors"
           }
         ],
         "ver": "0.36.0",
         "widget_ue_connectable": {}
       },
       "widgets_values": [
-        "qwen_image_2.1_bf16.safetensors",
+        "qwen_image_2.1_nvfp4.safetensors",
         "default"
       ]
     },

@@ -2,11 +2,31 @@
 # Sourced by provision.sh (after the stacks). Only append (+=).
 # Add a Qwen Image 2.1 LoRA here once and every qwen21 stack gets it.
 
-# Text encoder for every qwen21 stack: Qwen3-VL-8B heretic (uncensored), full bf16, 17.5 GB (pottokao). Stock CLIPLoader,
-# type qwen_image. The standard qwen3vl_8b_bf16 is NOT downloaded; every workflow's CLIP loader points at this file.
-MODELS+=(
-  "text_encoders|https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic/resolve/main/qwen3vl_8b_bf16_heretic.safetensors"
-)
+# Text encoder for every qwen21 stack: Qwen3-VL-8B heretic (uncensored) by pottokao, NVFP4 (6.3 GB). Every workflow's CLIP
+# loader points at qwen3vl_8b_nvfp4_heretic.safetensors. QWEN21_ENCODER=bf16 downloads the full-bf16 heretic (17.5 GB) instead
+# and links that filename to it (use if NVFP4 fails on your GPU). The standard (non-heretic) encoder is not downloaded.
+if [ "${QWEN21_ENCODER:-nvfp4}" = "bf16" ]; then
+    MODELS+=("text_encoders|https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic/resolve/main/qwen3vl_8b_bf16_heretic.safetensors")
+    LINKS+=("text_encoders/qwen3vl_8b_nvfp4_heretic.safetensors|text_encoders/qwen3vl_8b_bf16_heretic.safetensors")
+else
+    MODELS+=("text_encoders|https://huggingface.co/pottokao/Qwen-Image-2.1-Text-Encoder-Heretic-NVFP4/resolve/main/qwen3vl_8b_nvfp4_heretic.safetensors")
+fi
+
+# Diffusion model for every qwen21 stack. Every workflow's UNET loader points at qwen_image_2.1_nvfp4.safetensors.
+# QWEN21_DIFFUSION = auto (default) | nvfp4 | bf16. auto: pottokao's NVFP4 DiT (3.9 GB, community quant of the official model,
+# non-commercial licence) on Blackwell GPUs, else the official bf16 (14.2 GB) with that filename linked to it.
+_q21_dit="${QWEN21_DIFFUSION:-auto}"
+if [ "$_q21_dit" = "auto" ]; then
+    if gpu_is_blackwell; then _q21_dit=nvfp4; else _q21_dit=bf16; fi
+fi
+echo "Qwen21 diffusion model: $_q21_dit" >&2
+if [ "$_q21_dit" = "nvfp4" ]; then
+    MODELS+=("diffusion_models|https://huggingface.co/pottokao/Qwen-Image-2.1-DiT-NVFP4-ComfyUI/resolve/main/qwen_image_2.1_nvfp4.safetensors")
+else
+    MODELS+=("diffusion_models|https://huggingface.co/Comfy-Org/Qwen-Image-2.1/resolve/main/diffusion_models/qwen_image_2.1_bf16.safetensors")
+    LINKS+=("diffusion_models/qwen_image_2.1_nvfp4.safetensors|diffusion_models/qwen_image_2.1_bf16.safetensors")
+fi
+unset _q21_dit
 
 # Format: "subdir|url"  (filename is taken from the URL)
 MODELS+=(

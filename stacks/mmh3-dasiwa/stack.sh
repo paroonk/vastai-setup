@@ -49,8 +49,8 @@ CIVITAI+=(
 )
 
 # Text encoder by GPU. TEXT_ENCODER = "nvfp4" | "int8" | "auto" (default: nvfp4 on Blackwell, else int8)
-MMH3_TE_NVFP4="https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"   # 15.7 GB, Blackwell only
-# MMH3_TE_NVFP4="https://huggingface.co/Momoking/Qwen3-VL-32B-Heretic-MiniMax-H3-NVFP4/resolve/main/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors"   # 15.7 GB, Blackwell only (Uncensored)
+MMH3_TE_NVFP4="https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_nvfp4_awq.safetensors"   # 15.7 GB, native kernels on Blackwell
+# MMH3_TE_NVFP4="https://huggingface.co/Momoking/Qwen3-VL-32B-Heretic-MiniMax-H3-NVFP4/resolve/main/qwen3vl_32b_heretic_minimax_h3_nvfp4.safetensors"   # 15.7 GB, native kernels on Blackwell (Uncensored)
 MMH3_TE_INT8="https://huggingface.co/Comfy-Org/MiniMax-H3/resolve/main/text_encoders/qwen3vl_32b_minimax_h3_int8_convrot.safetensors"  # 27.1 GB, any GPU
 
 if [ "$(gpu_text_encoder)" = "nvfp4" ]; then
