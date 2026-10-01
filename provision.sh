@@ -281,6 +281,37 @@ download_models() {
     return 0
 }
 
+# One Civitai file into dir $2 (optional saved name $3). Resumable.
+# The API URL answers with a redirect to a signed storage URL. We resolve that redirect with
+# curl (which sends the token only to Civitai), then hand the signed URL, with no token, to
+# aria2c for 16 parallel connections: wget/aria2 would forward the token to the storage host,
+# which rejects it with HTTP 400. Any aria2 problem falls back to plain curl.
+civitai_fetch() {
+    local url="$1" dir="$2" fname="$3" signed try
+    local auth=(-H "Authorization: Bearer $CIVITAI_TOKEN")
+    for try in 1 2 3; do
+        if command -v aria2c >/dev/null 2>&1; then
+            signed=$(curl -s -o /dev/null -w '%{redirect_url}' "${auth[@]}" "$url")
+            if [ -n "$signed" ]; then
+                local oname=(); [ -n "$fname" ] && oname=(-o "$fname")
+                aria2c -x16 -s16 -k4M -c --file-allocation=none --max-tries=3 --retry-wait=3 \
+                    --console-log-level=warn --summary-interval=15 --download-result=hide \
+                    -d "$dir" "${oname[@]}" "$signed" && return 0
+                echo "WARN: aria2c failed (try $try/3), retrying"
+                continue
+            fi
+        fi
+        # fallback: single-stream curl. -C - resumes, but only with a fixed name (-J has none yet).
+        if [ -n "$fname" ]; then
+            (cd "$dir" && curl -fL -C - -o "$fname" --retry 3 "${auth[@]}" "$url") && return 0
+        else
+            rm -f "$dir"/* 2>/dev/null
+            (cd "$dir" && curl -fL -J -O --retry 3 "${auth[@]}" "$url") && return 0
+        fi
+    done
+    return 1
+}
+
 # Civitai: filename unknown until download, so a marker file tracks completion
 # (keyed by URL) and re-runs skip finished items.
 download_civitai() {
@@ -309,20 +340,13 @@ download_civitai() {
         fi
  
         tmp="$WORKSPACE/.tmp_civitai/$key"
-        rm -rf "$tmp"; mkdir -p "$tmp"
-        # curl, not wget: wget forwards the Authorization header to Civitai's
-        # signed storage redirect, which then rejects it with HTTP 400.
-        # curl drops the header on cross-host redirects; -J uses the server filename
-        # unless the entry gives its own (third field).
-        local name_args=(-J -O)
-        [ -n "$fname" ] && name_args=(-o "$fname")
-        if ! (cd "$tmp" && curl -fL "${name_args[@]}" --retry 3 \
-                -H "Authorization: Bearer $CIVITAI_TOKEN" "$url"); then
-            FAILED+=("civitai: $target ($url)"); rm -rf "$tmp"; continue
+        mkdir -p "$tmp"   # kept between attempts and re-runs so partial files resume
+        if ! civitai_fetch "$url" "$tmp" "$fname"; then
+            FAILED+=("civitai: $target ($url)"); continue   # tmp kept: a re-run resumes
         fi
- 
+
         local file
-        file=$(find "$tmp" -maxdepth 1 -type f | head -1)
+        file=$(find "$tmp" -maxdepth 1 -type f ! -name '*.aria2' | head -1)
         if [ -z "$file" ] || head -c 512 "$file" | grep -qi "<html"; then
             echo "ERROR: got an HTML page or nothing (bad token / link?)"
             FAILED+=("civitai: $target ($url)"); rm -rf "$tmp"; continue
@@ -340,7 +364,7 @@ download_civitai() {
         DONE_BYTES=$((DONE_BYTES + sz))
         rm -rf "$tmp"
     done
-    rm -rf "$WORKSPACE/.tmp_civitai" 2>/dev/null
+    [ ${#FAILED[@]} -eq 0 ] && rm -rf "$WORKSPACE/.tmp_civitai" 2>/dev/null   # else keep partials for a re-run
     return 0
 }
 
