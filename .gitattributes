@@ -1,0 +1,2 @@
+# Scripts run on Linux (Vast.ai): always LF, even when checked out on Windows.
+*.sh text eol=lf
