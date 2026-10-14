@@ -1,2 +1,6 @@
 # Proprietary (supporters only, licence forbids publishing): copy into ComfyUI/custom_nodes by hand
 stacks/*/comfyui-obvpm-pro-extensions/
+
+# Private zips (never commit; see README "Private nodes")
+private_nodes/
+*.zip

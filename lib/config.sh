@@ -16,4 +16,5 @@ NODES=()
 MODELS=()     # "subdir|url" or "subdir|url|filename"
 CIVITAI=()    # "target|url" or "target|url|filename"
 LINKS=()      # "link|target", both relative to models/: expose one downloaded file at a second path
+PRIVATE=()    # "comfy-subpath|folder": folder from the private dir on the instance, copied to ComfyUI/<comfy-subpath>/<folder>
 WF_SUBST=()   # "from|to": text replaced in installed workflow JSONs (e.g. a model filename swapped for the file actually downloaded)

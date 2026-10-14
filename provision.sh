@@ -54,7 +54,7 @@ provisioning_start() {
     step "Custom nodes (${#NODES[@]})";    install_nodes
     step "Models";                         plan_downloads; download_models
     step "Civitai files (${#CIVITAI[@]})"; download_civitai
-    step "Links, workflows, bundled nodes"; create_links; install_stack_workflows; install_stack_nodes
+    step "Links, workflows, nodes"       ; create_links; install_stack_workflows; install_stack_nodes; install_private
     rm -rf "$REPO_DIR"
     quiet_off
     summary

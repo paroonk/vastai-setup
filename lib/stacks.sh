@@ -91,7 +91,7 @@ load_stacks() {
             echo "Loaded family: $fam"
         fi
     done
-    dedupe APT_PACKAGES; dedupe PIP_PACKAGES; dedupe NODES; dedupe MODELS; dedupe CIVITAI; dedupe LINKS
+    dedupe APT_PACKAGES; dedupe PIP_PACKAGES; dedupe NODES; dedupe MODELS; dedupe CIVITAI; dedupe LINKS; dedupe PRIVATE
     echo "To install: ${#NODES[@]} nodes, ${#MODELS[@]} models, ${#CIVITAI[@]} Civitai files"
 }
 
@@ -178,5 +178,32 @@ install_stack_nodes() {
                 FAILED+=("bundled node: $s/$name")
             fi
         done
+    done
+}
+
+# Copy the folders listed with `private` from the private dir on the instance into ComfyUI. The private dir is
+# $PRIVATE_DIR (default $WORKSPACE/vastai-setup-private); upload the folders there yourself (scp / Jupyter).
+# A folder that is already in ComfyUI is replaced. Nodes get their requirements.txt installed.
+install_private() {
+    local dir="${PRIVATE_DIR:-$WORKSPACE/vastai-setup-private}" entry sub folder src dest
+    if [ ${#PRIVATE[@]} -eq 0 ]; then return 0; fi
+    for entry in "${PRIVATE[@]}"; do
+        IFS='|' read -r sub folder <<< "$entry"
+        src="$dir/$folder"
+        dest="$COMFY/$sub/$folder"
+        if [ ! -d "$src" ]; then
+            echo "private: $src not found, skipped ($folder)"
+            continue
+        fi
+        mkdir -p "$COMFY/$sub"
+        rm -rf "$dest"
+        if cp -r "$src" "$dest"; then
+            echo "private: $folder -> $dest"
+            if [ "$sub" = "custom_nodes" ] && [ -f "$dest/requirements.txt" ]; then
+                pip install --root-user-action=ignore --no-cache-dir -r "$dest/requirements.txt"                     || FAILED+=("node reqs: $folder")
+            fi
+        else
+            FAILED+=("private: $folder")
+        fi
     done
 }

@@ -30,6 +30,13 @@ model()   { MODELS+=("$1|$2${3:+|$3}"); }
 
 civitai() { CIVITAI+=("$1|$2${3:+|$3}"); }
 
+# private <comfy-subpath> <folder>   -- a folder that must NOT be published (licence, personal files). Not downloaded:
+#   you put it in the private dir on the instance ($PRIVATE_DIR, default /workspace/vastai-setup-private), and the last
+#   step copies it to ComfyUI/<comfy-subpath>/<folder>. Missing folder = skipped with a log line.
+#   private custom_nodes comfyui-obvpm-pro-extensions
+#   private models refmods
+private() { PRIVATE+=("$1|$2"); }
+
 # node <github-owner/repo | full git URL>   -- custom node, cloned into ComfyUI/custom_nodes
 node() { case "$1" in http*) NODES+=("$1");; *) NODES+=("https://github.com/$1");; esac; }
 
