@@ -183,7 +183,7 @@ install_stack_nodes() {
 
 # Copy the folders listed with `private` from the private dir on the instance into ComfyUI. The private dir is
 # $PRIVATE_DIR (default $WORKSPACE/vastai-setup-private); upload the folders there yourself (scp / Jupyter).
-# A folder that is already in ComfyUI is replaced. Nodes get their requirements.txt installed.
+# A custom node that is already in ComfyUI is replaced; any other folder (e.g. models/refmods) is merged. Nodes get their requirements.txt installed.
 install_private() {
     local dir="${PRIVATE_DIR:-$WORKSPACE/vastai-setup-private}" entry sub folder src dest
     if [ ${#PRIVATE[@]} -eq 0 ]; then return 0; fi
@@ -196,8 +196,14 @@ install_private() {
             continue
         fi
         mkdir -p "$COMFY/$sub"
-        rm -rf "$dest"
-        if cp -r "$src" "$dest"; then
+        if [ "$sub" = "custom_nodes" ]; then
+            rm -rf "$dest"                     # a node is replaced as a whole
+            cp -r "$src" "$dest"
+        else
+            mkdir -p "$dest"                   # other folders (models/refmods) are merged: files you made on the instance stay
+            cp -r "$src/." "$dest/"
+        fi
+        if [ $? -eq 0 ]; then
             echo "private: $folder -> $dest"
             if [ "$sub" = "custom_nodes" ] && [ -f "$dest/requirements.txt" ]; then
                 pip install --root-user-action=ignore --no-cache-dir -r "$dest/requirements.txt"                     || FAILED+=("node reqs: $folder")

@@ -92,7 +92,7 @@ downloads every stack's models. Set it explicitly in each template.
 Some things must not be published: `comfyui-obvpm-pro-extensions` (supporters-only licence) and your own `refmods`. List them in a
 stack with `private <comfy-subpath> <folder>`, e.g. `private custom_nodes comfyui-obvpm-pro-extensions` and `private models refmods`.
 They are never downloaded. Upload the folders to `/workspace/vastai-setup-private/` on the instance (set `PRIVATE_DIR` to use another
-folder); the last provisioning step copies each one to `ComfyUI/<comfy-subpath>/<folder>`, replacing a copy that is already there, and installs a
+folder); the last provisioning step copies each one to `ComfyUI/<comfy-subpath>/<folder>`, replacing a node that is already there (a model folder such as `refmods` is merged, so files you made on the instance stay), and installs a
 node's `requirements.txt`. A folder that is missing is skipped with a log line.
 
 A fresh instance has nothing uploaded at first boot, so upload and re-run provisioning once; finished downloads are skipped. If you keep the
