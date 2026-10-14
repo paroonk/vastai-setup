@@ -7,7 +7,7 @@ log() { echo -e "\n==========================================\n$*\n=============
 # (Vast's web log is interleaved with its own "startup paused" lines: `cat` the status file instead).
 STATUS_FILE="$WORKSPACE/provision-status.txt"
 PROV_T0=$(date +%s); STEP_N=0; STEP_TOTAL=9; STEP_NAME=""; STEP_T0=$PROV_T0
-PLAN_BYTES=0; DONE_BYTES=0; declare -A SIZE_OF=()
+PLAN_BYTES=0; DONE_BYTES=0; declare -gA SIZE_OF=()   # -g: this file is sourced inside bootstrap(), a plain declare would be local to it
 fmt_dur() { local s=$1; printf '%dm%02ds' $((s/60)) $((s%60)); }
 gb()      { awk -v b="${1:-0}" 'BEGIN{printf "%.1f", b/1e9}'; }
 status()  { printf '%s  %s\n' "$(date '+%H:%M:%S')" "$*" > "$STATUS_FILE" 2>/dev/null || true; }
