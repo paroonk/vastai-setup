@@ -36,7 +36,7 @@ plan_downloads() {
     fi
 }
 
-# HF files: hf CLI (Xet, parallel, resumable). Downloads into a hidden temp dir and
+# HF files: hf CLI (Xet, parallel, resumable). `command hf`: lib/dsl.sh defines a shell function named hf (stack helper), which would shadow the CLI. Downloads into a hidden temp dir and
 # moves into place only on success, so "final file exists" == "download complete".
 download_hf() {
     local url="$1" dest="$2"
@@ -47,7 +47,7 @@ download_hf() {
     tmp="$M/.tmp_hf/${repo_id//\//_}"
     mkdir -p "$tmp"
 
-    HF_XET_HIGH_PERFORMANCE=1 hf download "$repo_id" "$repo_path" --revision "$rev" --local-dir "$tmp" \
+    HF_XET_HIGH_PERFORMANCE=1 command hf download "$repo_id" "$repo_path" --revision "$rev" --local-dir "$tmp" \
         && [ -f "$tmp/$repo_path" ] \
         && mv -f "$tmp/$repo_path" "$dest"
 }
