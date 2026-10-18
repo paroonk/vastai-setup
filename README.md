@@ -89,8 +89,8 @@ downloads every stack's models. Set it explicitly in each template.
 
 ## Private folders (not in the repo)
 
-Some things must not be published: `comfyui-obvpm-pro-extensions` (supporters-only licence) and your own `refmods`. List them in a
-stack with `private <comfy-subpath> <folder>`, e.g. `private custom_nodes comfyui-obvpm-pro-extensions` and `private models refmods`.
+Some things must not be published, e.g. a supporters-only node pack or your own `refmods`. List them in a
+stack with `private <comfy-subpath> <folder>`, e.g. `private custom_nodes <node-folder>` and `private models refmods`.
 They are never downloaded. Upload the folders to `/workspace/vastai-setup-private/` on the instance (set `PRIVATE_DIR` to use another
 folder); the last provisioning step copies each one to `ComfyUI/<comfy-subpath>/<folder>`, replacing a node that is already there (a model folder such as `refmods` is merged, so files you made on the instance stay), and installs a
 node's `requirements.txt`. A folder that is missing is skipped with a log line.
@@ -131,8 +131,8 @@ when the author releases a new version, re-download and re-apply the path fixes.
 
 | File | Source | Changes |
 |---|---|---|
-| `stacks/h3-obvpm-timeline/h3_obvpm_timeline_r2v_v0.3.0-010-pro-refmod.json` | [chanon/comfyui-obvpm-timeline](https://github.com/chanon/comfyui-obvpm-timeline) (GPL-3.0) | Author files, with the LoRA names edited to the `h3_<name>` files the h3 family saves (the original `h3\<name>` sub-folder prefix is removed). Their nodes are the bundled folders `comfyui-obvpm`, `comfyui-obvpm-timeline`, `comfyui-obvpm-pro-extensions` in the same stack, copied to `custom_nodes/` in the last step; the -refmod ones also need ComfyUI-MiniMaxH3Mod (installed). Not downloaded: the `minimax_h3_hybrid_fl2va_ref2va_b30-49` model that the v0.3 engine-settings preset names (community file, pick your own hybrid or leave the loaded ref2va model), and RefMod files for `models/refmods` |
-| `stacks/qwen21-edit-main/*.json` (`qwen21_edit`, `qwenImage21Outpaint_v12`, `qwenImage21Rotate_v11`) | Qwen Image 2.1 edit / outpaint / rotate workflows | Their saved `qwen-image-2.1-UC-int8_convrot` and `qwen3vl_8b_int8_convrot_heretic` names are rewritten to the NVFP4 files at install. LoRA loaders already use the `qwen21_` saved names from the family file. AusBoss nodes come from the base list. The edit workflow's `sam3.1_multiplex_fp16` checkpoint (1.7 GB, bypassed by default) is downloaded by the stack. |
+| `stacks/h3-obvpm-timeline/RefMod - Audio.json`, `RefMod - Images.json` | Own files | RefMod extraction workflows (audio / images). Need ComfyUI-MiniMaxH3Mod (installed); VAE names match the h3 family files. The obvpm node packs (`comfyui-obvpm`, `comfyui-obvpm-timeline`, `comfyui-obvpm-pro-extensions`) are not installed by this repo; upload them to `custom_nodes/` yourself. |
+| `stacks/qwen21-edit-main/*.json` (`qwen21_edit`, `qwenImage21Outpaint_v12`, `qwenImage21Rotate_v11`) | Qwen Image 2.1 edit / outpaint / rotate workflows | Their saved `qwen-image-2.1-UC-int8_convrot` and `qwen3vl_8b_int8_convrot_heretic` names are rewritten to the NVFP4 files at install. LoRA loaders already use the `qwen21_` saved names from the family file. AusBoss nodes come from the base list. The edit workflow's `sam3.1_multiplex_fp16` checkpoint (1.7 GB, bypassed by default) is downloaded by the stack. The edit workflow uses obvpm bundle nodes, which are not installed by this repo; upload them yourself. |
 
 Stacks can add `LINKS+=("link|target")` (paths under `models/`) to expose one downloaded file at a
 second path a node expects, or `WF_SUBST+=("from|to")` to rewrite a text (e.g. a model filename) in the installed workflows.

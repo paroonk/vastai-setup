@@ -56,7 +56,7 @@ Image1 = target / base image, Image2 = replacement reference. Resolution matters
 
 | LoRA | Notes |
 |---|---|
-| Turbo, obvpm timeline presets | The Turbo LoRAs in the family file are the ones the obvpm timeline presets load ("vanilla", "lightx2v", "taomate 3 step refine"). The workflows were edited to load the h3_ names saved by the family file (no h3/ sub-folder, no install-time rewrite). |
+| Turbo, obvpm timeline presets | The Turbo LoRAs in the family file are the ones the obvpm timeline presets load ("vanilla", "lightx2v", "taomate 3 step refine"). Saved under loras/h3/ with the original names, matching the author workflows' h3\ paths (no edit, no rewrite). |
 | Turbo v4 step600 (larryvrh, Apache-2.0) | Strength 1.0, 6-8 steps, scheduler simple. Use with the MiniMax-H3 Turbo LoRA + Turbo Sampler nodes (`Larryvrh/ComfyUI-MiniMax-H3-Turbo`). `low_vram`: off first, enable only if out of memory. The author documents T2V / I2V; verify Ref2VA compatibility in your OBVPM preset. |
 | People Realism (fal) | Prompt prefix `r34l1sm`. Strength 1.0; 0.6-0.8 for a lighter effect. T2V / I2V / R2V. |
 | Character Swap v1, 1000-step (akatz-ai) | Needs the Ref2VA base. Model-only LoRA loader, strength 1.0. No trigger word; name the target explicitly in the prompt. Source video = `<Video 1>`, replacement image = `<Picture 1>`. Start with continuous 4-5 second shots; motion / lip sync may drift. Not a Turbo LoRA; Turbo is optional. |

@@ -22,3 +22,6 @@ node crystian/comfyui-crystools
 node PGCRT/CRT-Nodes
 node AlexYez/comfyui-artius-browser
 node ausboss/ComfyUI-AusBoss
+node yolain/ComfyUI-Easy-Use
+node ltdrdata/ComfyUI-Impact-Pack
+node Suzie1/ComfyUI_Comfyroll_CustomNodes

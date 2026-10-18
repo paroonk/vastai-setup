@@ -21,13 +21,14 @@ github vae_approx madebyollin/taehv@62f7591f59dfbb4c3c02b7a621d180a9eeaba26c saf
 
 # ---- LoRAs ----
 
-# Turbo (obvpm timeline presets). All LoRAs are saved as h3_<name>; the workflows load them by those names.
-hf loras lightx2v/Minimax-h3-Turbo minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors
-hf loras lightx2v/Minimax-h3-Turbo minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors  # "vanilla" presets
-hf loras Kijai/MiniMax-H3_comfy@098f8c48fccead9a93191c166ca31a130659d3bd loras/minimax_h3_ref2v_lightx2v_turbo_4step_v0.1_resized_avg_rank_20_bf16.safetensors h3_ref2v_lightx2v_turbo_4step_v0.1_resized_avg_rank_20_bf16.safetensors  # "lightx2v" preset (pinned commit)
-hf loras Robert1212star/TaoMate-H3-3Step-ComfyUI taomate_h3_3step_comfy.safetensors h3_taomate_3step_comfy.safetensors  # "taomate 3 step refine" preset
+# Turbo (obvpm timeline presets). Saved under loras/h3/ with the original file names, matching the
+# h3\<name> paths in the author's workflows (no rename, no install-time rewrite).
+# hf loras lightx2v/Minimax-h3-Turbo minimax_h3_fl2v_turbo_4step_v1.0_768p_comfyui_bf16.safetensors
+hf loras lightx2v/Minimax-h3-Turbo minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors h3/minimax_h3_ref2v_turbo_8step_v1.0_768p_comfyui_bf16.safetensors
+hf loras Kijai/MiniMax-H3_comfy@098f8c48fccead9a93191c166ca31a130659d3bd loras/minimax_h3_ref2v_lightx2v_turbo_4step_v0.1_resized_avg_rank_20_bf16.safetensors h3/minimax_h3_ref2v_lightx2v_turbo_4step_v0.1_resized_avg_rank_20_bf16.safetensors
+hf loras Robert1212star/TaoMate-H3-3Step-ComfyUI taomate_h3_3step_comfy.safetensors h3/taomate_h3_3step_comfy.safetensors
 # Turbo v4 step600 (larryvrh): strength 1.0, 6-8 steps. The workflows' Turbo LoRA loader uses this file
-hf loras larryvrh/MiniMax-H3-Turbo-Lora minimax_h3_turbo_v4_step600_ema.safetensors h3_turbo_v4_step600_ema.safetensors
+hf loras larryvrh/MiniMax-H3-Turbo-Lora minimax_h3_turbo_v4_step600_ema.safetensors h3/minimax_h3_turbo_v4_step600_ema.safetensors
 
 # Realism and character swap
 # People realism: prefix r34l1sm, strength 1.0
