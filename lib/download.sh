@@ -65,7 +65,7 @@ download_models() {
         IFS='|' read -r subdir url fname <<< "$entry"   # fname optional: save under this name
         local name="${fname:-${url##*/}}"
         local dest="$M/$subdir/$name"
-        mkdir -p "$M/$subdir"
+        mkdir -p "$(dirname "$dest")"   # saved-name may carry a subfolder (h3/foo.safetensors)
 
         if [ -f "$dest" ]; then
             echo "OK (exists): $subdir/$name"
